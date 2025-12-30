@@ -1,0 +1,9 @@
+id,question,answer,category,keywords,confidence,related_charts
+1,2023年最热门的编程语言是什么？,根据项目数据分析，JavaScript、Python和Java仍然是最受欢迎的编程语言，其中TypeScript显示出强劲的增长趋势，Rust和Go等新兴语言也在快速发展。,language_trends,"编程语言,热门,趋势,2023",0.95,language_trends_detailed.csv
+2,哪些开源项目影响力最大？,根据OpenRank和综合评分，当前影响力最大的项目包括Apache基金会项目（如Spark、Airflow）、Google项目（如TensorFlow、Kubernetes）以及Microsoft项目（如VS Code、TypeScript）。,influence_analysis,"开源项目,影响力,排名,OpenRank",0.92,influence_ranking.csv
+3,如何选择适合的技术栈？,技术栈选择应考虑成熟度、社区支持、学习曲线和项目需求。建议：Web开发选择React/Vue，后端可选择Java/Python/Go，移动开发考虑Flutter/React Native，AI/ML项目推荐Python生态。,technology_guidance,"技术栈,选择,建议,成熟度",0.88,technology_maturity.csv
+4,哪些技术最有发展潜力？,基于当前趋势分析，Rust、WebAssembly、Serverless架构和AI/ML相关技术显示出最高的增长潜力。这些技术在性能和开发效率方面都有显著优势。,future_trends,"发展趋势,潜力,新兴技术,Rust,AI",0.85,"technology_maturity.csv,keyword_trends.csv"
+5,如何评估开源项目的健康度？,项目健康度评估应关注：1)贡献者数量和多样性；2)Issue响应速度；3)版本更新频率；4)社区活跃度；5)文档完整性。建议关注Bus Factor指标和平均Issue处理时间。,project_evaluation,"项目健康度,评估,贡献者,Bus Factor",0.9,influence_ranking.csv
+6,云计算相关技术趋势如何？,云计算领域，Kubernetes已经成为容器编排的标准，Service Mesh、GitOps和Serverless架构正在快速发展。Docker仍然占主导地位，但Podman等替代方案也在兴起。,cloud_trends,"云计算,Kubernetes,Docker,Serverless",0.87,"keyword_trends.csv,technology_maturity.csv"
+7,前端开发的技术选择有哪些？,前端领域，React生态系统最为庞大，Vue.js易学易用，Angular适合大型企业项目。TypeScript普及率持续上升，构建工具以Webpack、Vite为主，状态管理推荐Redux、Zustand等。,frontend_trends,"前端,React,Vue,Angular,TypeScript",0.89,language_trends_detailed.csv
+8,数据科学和AI领域有哪些热门技术？,AI/ML领域，Python生态系统占主导，TensorFlow和PyTorch是主要框架，Hugging Face在NLP领域表现突出。数据工程方面，Spark、Flink处理大数据，MLOps工具如MLflow、 Kubeflow正在兴起。,ai_data_science,"数据科学,AI,机器学习,TensorFlow,PyTorch",0.86,keyword_trends.csv
