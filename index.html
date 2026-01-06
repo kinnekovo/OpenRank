@@ -4,278 +4,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>项目分析平台 - 首页</title>
-    <!-- 引入Bootstrap图标（与原有项目一致） -->
+    <!-- 引入Bootstrap图标 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <!-- 引入ECharts（备用，首页若需简单图表可直接用） -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <!-- 通用样式 -->
     <style>
-        /* 全局重置与基础样式（与原有项目统一） */
+        /* 基础重置 & 核心样式 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft Yahei", Arial, sans-serif;
+            font-family: "Microsoft Yahei", sans-serif;
         }
-
         body {
             background-color: #f8f9fa;
-            color: #343a40;
-            line-height: 1.6;
+            min-height: 100vh;
+            /* 移除body默认边距，避免Banner出现滚动条 */
+            margin: 0;
+            padding: 0;
         }
-
-        .container {
-            width: 95%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        /* 顶部导航栏（全局共用，后续其他页面可复用） */
-        .top-nav {
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: sticky;
+        /* 导航栏 - 固定在顶部，不占用Banner空间 */
+        .navbar {
+            position: fixed; /* 固定导航栏 */
             top: 0;
-            z-index: 999;
-        }
-
-        .top-nav .container {
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95); /* 半透明背景，不遮挡Banner */
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 60px;
+            z-index: 100; /* 确保导航栏在最上层 */
         }
-
-        .top-nav .logo {
+        .navbar-logo {
             font-size: 1.5rem;
             font-weight: bold;
-            color: #007bff;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .navbar-menu a {
+            margin: 0 1rem;
+            color: #333;
             text-decoration: none;
+            font-size: 1.1rem;
         }
-
-        .top-nav nav a {
-            color: #343a40;
-            text-decoration: none;
-            margin-left: 2rem;
-            font-size: 1rem;
-            transition: color 0.3s;
-        }
-
-        .top-nav nav a:hover,
-        .top-nav nav a.active {
+        .navbar-menu a:hover {
             color: #007bff;
-            font-weight: 500;
         }
-
-        /* 首页头部banner */
+        /* Banner - 占满整个初始屏幕（100vh） */
         .banner {
-            background: linear-gradient(135deg, #007bff 0%, #17a2b8 100%);
-            color: #fff;
-            padding: 4rem 0;
+            /* 核心：100%视口高度，减去导航栏高度（避免内容被遮挡） */
+            height: 100vh;
+            padding-top: 80px; /* 匹配导航栏高度，避免内容被导航栏遮挡 */
+            width: 100%;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* 渐变背景更美观 */
+            /* 弹性布局让内容垂直+水平居中 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            margin-bottom: 3rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-
-        .banner h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        .banner h2 {
+            font-size: 3rem; /* 放大标题 */
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
         }
-
         .banner p {
-            font-size: 1.2rem;
-            max-width: 800px;
+            font-size: 1.4rem;
+            color: #666;
+            max-width: 900px;
             margin: 0 auto;
-            opacity: 0.9;
+            line-height: 1.6;
         }
-
-        /* 模块卡片区域 */
-        .modules {
-            padding: 2rem 0;
-            margin-bottom: 3rem;
+        /* 功能卡片容器 */
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 7rem;
+            padding: 4rem 2rem;
+            width: 100%;
+            flex-wrap: wrap;
         }
-
-        .modules h2 {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 2.5rem;
-            color: #343a40;
-            position: relative;
-        }
-
-        .modules h2::after {
-            content: "";
-            display: block;
-            width: 80px;
-            height: 4px;
-            background-color: #007bff;
-            margin: 0.8rem auto;
-            border-radius: 2px;
-        }
-
-        .module-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .module-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 2rem;
-            transition: transform 0.3s, box-shadow 0.3s;
+        /* 功能卡片 */
+        .func-card {
+            background: #fff;
+            width: 500px;
+            padding: 6rem 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             text-decoration: none;
-            color: inherit;
+            color: #333;
+            transition: transform 0.3s;
         }
-
-        .module-card:hover {
+        .func-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
-
-        .module-card .icon {
-            font-size: 3rem;
-            color: #007bff;
+        .card-icon {
+            font-size: 2.5rem;
             margin-bottom: 1.5rem;
-        }
-
-        .module-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #343a40;
-        }
-
-        .module-card p {
-            color: #6c757d;
-            margin-bottom: 1.5rem;
-        }
-
-        .module-card .btn {
             display: inline-block;
-            padding: 0.6rem 1.2rem;
-            background-color: #007bff;
+            padding: 1rem;
+            border-radius: 10px;
             color: #fff;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: background-color 0.3s;
         }
-
-        .module-card .btn:hover {
-            background-color: #0056b3;
+        .bg-primary { background: #007bff; }
+        .bg-success { background: #28a745; }
+        .bg-warning { background: #ffc107; color: #333 !important; }
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #2c3e50;
         }
-
-        /* 页脚样式 */
-        footer {
-            background-color: #343a40;
-            color: #fff;
-            padding: 2rem 0;
+        .card-value {
+            font-size: 1.1rem;
+            color: #007bff;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .card-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+        /* 页脚 */
+        .footer {
+            background: #fff;
+            padding: 1.5rem 2rem;
             text-align: center;
-            margin-top: 4rem;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+            margin-top: 2rem;
         }
-
-        footer p {
-            opacity: 0.8;
+        .footer-right {
+            margin-top: 0.5rem;
         }
-
-        /* 响应式适配（与原有项目统一） */
-        @media (max-width: 768px) {
-            .top-nav .container {
-                flex-direction: column;
-                height: auto;
-                padding: 1rem 0;
-            }
-
-            .top-nav nav {
-                margin-top: 1rem;
-            }
-
-            .top-nav nav a {
-                margin-left: 1rem;
-                margin-right: 1rem;
-            }
-
-            .banner h1 {
-                font-size: 2rem;
-            }
-
-            .modules h2 {
-                font-size: 1.8rem;
-            }
+        .footer-right a {
+            margin: 0 0.5rem;
+            color: #666;
+            text-decoration: none;
         }
     </style>
+    <!-- 引入ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 </head>
 <body>
-    <!-- 顶部导航栏（所有页面共用） -->
-    <header class="top-nav">
-        <div class="container">
-            <a href="index.html" class="logo">项目分析平台</a>
-            <nav>
-                <a href="index.html" class="active">首页</a>
-                <a href="influence-analysis/index.html">影响力分析</a>
-                <a href="trend-analysis/index.html">技术趋势分析</a>
-                <a href="maxkb-qa/index.html">MaxKB智能问答</a>
-            </nav>
+    <!-- 导航栏 -->
+    <header class="navbar">
+        <div class="navbar-logo">
+            <i class="bi bi-bar-chart-line"></i>
+            <span>OpenInsight</span>
+        </div>
+        <div class="navbar-menu">
+            <a href="index.html">首页</a>
+            <a href="influence-analysis/index.html">影响力分析</a>
+            <a href="trend-analysis/index.html">技术趋势分析</a>
+            <a href="maxkb-qa/index.html">MaxKB智能问答</a>
+        </div>
+        <div class="navbar-user">
+            <span class="date" id="current-date"></span>
         </div>
     </header>
 
-    <!-- 首页Banner -->
-    <section class="banner">
-        <div class="container">
-            <h1>一站式项目数据分析与智能决策平台</h1>
-            <p>整合项目影响力分析、技术趋势预测、智能问答能力，为项目评估与决策提供全方位数据支撑</p>
-        </div>
-    </section>
+    <!-- 全屏Banner -->
+    <div class="banner">
+        <h2>一站式项目数据分析与智能决策平台</h2>
+        <p>整合项目影响力分析、技术趋势预测、智能问答能力，为项目评估与决策提供全方位数据支撑</p>
+    </div>
 
-    <!-- 核心模块入口 -->
-    <section class="modules">
-        <div class="container">
-            <h2>核心功能模块</h2>
-            <div class="module-cards">
-                <!-- 项目影响力分析模块入口 -->
-                <a href="influence-analysis/index.html" class="module-card">
-                    <div class="icon">
-                        <i class="bi bi-bar-chart-fill"></i>
-                    </div>
-                    <h3>项目影响力分析</h3>
-                    <p>包含平台数据概览、项目影响力Top10排名、完整Top300排名列表，支持按编程语言筛选，直观展示项目影响力分布。</p>
-                    <span class="btn">进入模块</span>
-                </a>
-
-                <!-- 技术趋势分析与预测模块入口 -->
-                <a href="trend-analysis/index.html" class="module-card">
-                    <div class="icon">
-                        <i class="bi bi-line-chart-fill"></i>
-                    </div>
-                    <h3>技术趋势分析与预测</h3>
-                    <p>分析各技术栈的发展趋势、热度变化，结合历史数据预测未来技术走向，为技术选型提供参考。</p>
-                    <span class="btn">进入模块</span>
-                </a>
-
-                <!-- MaxKB智能问答模块入口 -->
-                <a href="maxkb-qa/index.html" class="module-card">
-                    <div class="icon">
-                        <i class="bi bi-chat-dots-fill"></i>
-                    </div>
-                    <h3>MaxKB智能问答</h3>
-                    <p>基于项目数据的智能问答系统，支持自然语言查询项目指标、趋势等信息，快速获取数据答案。</p>
-                    <span class="btn">进入模块</span>
-                </a>
+    <!-- 功能卡片 -->
+    <div class="card-container">
+        <a href="influence-analysis/index.html" class="func-card">
+            <div class="card-icon bg-primary">
+                <i class="bi bi-bar-chart-fill"></i>
             </div>
-        </div>
-    </section>
+            <div class="card-title">项目影响力分析</div>
+            <div class="card-value">核心模块</div>
+            <div class="card-desc">平台数据概览、Top排名、多维度筛选</div>
+        </a>
+
+        <a href="trend-analysis/index.html" class="func-card">
+            <div class="card-icon bg-success">
+                <i class="bi bi-graph-up"></i>
+            </div>
+            <div class="card-title">技术趋势分析与预测</div>
+            <div class="card-value">核心模块</div>
+            <div class="card-desc">技术栈趋势、热度变化、未来预测</div>
+        </a>
+
+        <a href="maxkb-qa/index.html" class="func-card">
+            <div class="card-icon bg-warning">
+                <i class="bi bi-chat-dots-fill"></i>
+            </div>
+            <div class="card-title">MaxKB智能问答</div>
+            <div class="card-value">核心模块</div>
+            <div class="card-desc">自然语言查询、快速数据检索</div>
+        </a>
+    </div>
 
     <!-- 页脚 -->
-    <footer>
-        <div class="container">
-            <p>© 2026 项目分析平台 | 一站式数据驱动决策解决方案</p>
+    <footer class="footer">
+        <div>© 2026 项目分析平台 | 一站式数据驱动决策解决方案</div>
+        <div class="footer-right">
+            <a href="#"><i class="bi bi-question-circle"></i> 帮助中心</a>
+            <a href="#"><i class="bi bi-shield-lock"></i> 隐私政策</a>
         </div>
     </footer>
 
-    <!-- 通用JS（可后续扩展） -->
+    <!-- 日期JS -->
     <script>
-        // 可添加首页交互逻辑，比如动态效果、数据加载等
-        console.log("首页加载完成");
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('zh-CN', { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit' 
+        });
+        document.getElementById('current-date').textContent = dateStr;
     </script>
 </body>
 </html>
