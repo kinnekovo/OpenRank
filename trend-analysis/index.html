@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenInsight - 技术趋势分析与预测</title>
+    <!-- 引入CDN依赖 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../style.css">
+    <!-- 引入图标 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="navbar">
+        <div class="navbar-logo">
+            <i class="bi bi-bar-chart-line"></i>
+            <span>OpenInsight</span>
+        </div>
+        <div class="navbar-menu">
+            <a href="../index.html">首页</a>
+            <a href="../influence-analysis/index.html">影响力分析</a>
+            <a href="index.html" class="active">技术趋势分析</a>
+            <a href="../maxkb-qa/index.html">MaxKB智能问答</a>
+        </div>
+        <div class="navbar-user">
+            <span class="date" id="current-date"></span>
+        </div>
+    </header>
+
+    <!-- 主体容器：侧边栏 + 主内容 -->
+    <div class="main-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <a href="#overview" class="sidebar-item active">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>平台概览</span>
+                </a>
+                <a href="#ranking" class="sidebar-item">
+                    <i class="bi bi-trophy"></i>
+                    <span>影响力排名</span>
+                </a>
+                <a href="#trends" class="sidebar-item disabled">
+                    <i class="bi bi-graph-up"></i>
+                    <span>技术趋势</span>
+                </a>
+                <a href="#qa" class="sidebar-item disabled">
+                    <i class="bi bi-chat-dots"></i>
+                    <span>智能问答</span>
+                </a>
+                <a href="#data" class="sidebar-item disabled">
+                    <i class="bi bi-database"></i>
+                    <span>数据管理</span>
+                </a>
+            </div>
+            
+            <!-- 数据更新提示 -->
+            <div class="sidebar-footer">
+                <p><i class="bi bi-clock"></i> 数据更新时间</p>
+                <p class="update-time" id="update-time">2026-01-01</p>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="content">
+            <!-- 面包屑导航 -->
+            <div class="breadcrumb">
+                <a href="../index.html">首页</a> / <span id="current-page">技术趋势分析与预测</span>
+            </div>
+
+            <!-- 筛选工具栏 -->
+            <div class="tool-bar">
+                <div class="filter-group">
+                    <label for="time-range"><i class="bi bi-calendar"></i> 时间范围：</label>
+                    <select id="time-range">
+                        <option value="all" selected>全部（2025-02至2026-01）</option>
+                        <option value="half-year">近6个月（2025-08至2026-01）</option>
+                        <option value="quarter">近3个月（2025-11至2026-01）</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="trend-filter"><i class="bi bi-sort-up"></i> 趋势方向：</label>
+                    <select id="trend-filter">
+                        <option value="all" selected>全部趋势</option>
+                        <option value="up">上升趋势</option>
+                        <option value="down">下降趋势</option>
+                    </select>
+                </div>
+                <button class="btn-primary" id="query-btn">
+                    <i class="bi bi-search"></i> 刷新趋势
+                </button>
+            </div>
+
+            <!-- 核心指标卡片 -->
+            <div class="metric-row">
+                <div class="metric-card">
+                    <div class="card-icon bg-success">
+                        <i class="bi bi-arrow-trend-up"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">上升最快技术领域</div>
+                        <div class="card-value" id="fastest-rising-domain">AI/ML</div>
+                        <div class="card-desc" id="domain-rising-desc">影响力涨幅45%（2025-09至2026-01）</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="card-icon bg-primary">
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">热度最高编程语言</div>
+                        <div class="card-value" id="hottest-language">Python</div>
+                        <div class="card-desc" id="lang-hot-desc">热度指数78.5（2026-01）</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="card-icon bg-warning">
+                        <i class="bi bi-lightbulb-fill"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">推荐布局技术</div>
+                        <div class="card-value" id="recommend-tech">TypeScript</div>
+                        <div class="card-desc" id="recommend-desc">竞争度低（0.42）+ 连续5个月上升</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="card-icon bg-danger">
+                        <i class="bi bi-arrow-trend-down"></i>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">下降最明显领域</div>
+                        <div class="card-value" id="fastest-falling-domain">区块链</div>
+                        <div class="card-desc" id="domain-falling-desc">影响力跌幅25%（2025-02至2026-01）</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第一部分：技术领域趋势（独立图表，优先展示） -->
+            <section class="module">
+                <div class="module-header">
+                    <h2><i class="bi bi-cubes"></i> 技术领域趋势分析</h2>
+                    <p>基于keyword_trends.csv数据 | 核心指标：影响力得分</p>
+                </div>
+                
+                <!-- 技术领域历史趋势图表 -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>技术领域历史趋势（2025-02至2026-01）</h3>
+                            <span class="chart-desc">Top5技术领域影响力得分变化 | 点击图例隐藏/显示</span>
+                        </div>
+                        <div class="chart-container" id="domain-trend-chart"></div>
+                    </div>
+                </div>
+
+                <!-- 技术领域未来预测图表 -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>技术领域未来3个月预测（2026-02至2026-04）</h3>
+                            <span class="chart-desc">预测置信度：85%（线性回归算法）</span>
+                        </div>
+                        <div class="chart-container" id="domain-forecast-chart"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 第二部分：编程语言趋势（独立图表，后展示） -->
+            <section class="module">
+                <div class="module-header">
+                    <h2><i class="bi bi-code-slash"></i> 编程语言趋势分析</h2>
+                    <p>基于language_trends_detailed.csv数据 | 核心指标：热度指数</p>
+                </div>
+                
+                <!-- 编程语言历史趋势图表 -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>编程语言历史趋势（2025-02至2026-01）</h3>
+                            <span class="chart-desc">Top5编程语言热度指数变化 | 点击图例隐藏/显示</span>
+                        </div>
+                        <div class="chart-container" id="language-trend-chart"></div>
+                    </div>
+                </div>
+
+                <!-- 编程语言未来预测图表 -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>编程语言未来3个月预测（2026-02至2026-04）</h3>
+                            <span class="chart-desc">预测置信度：85%（线性回归算法）</span>
+                        </div>
+                        <div class="chart-container" id="language-forecast-chart"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 趋势结论汇总 -->
+            <section class="module">
+                <div class="module-header">
+                    <h2><i class="bi bi-file-text-fill"></i> 趋势预测结论</h2>
+                    <p>综合技术领域与编程语言趋势分析 | 更新时间：2026-01</p>
+                </div>
+                <div class="module-content" id="forecast-conclusion">
+                    <p>1. <strong>技术领域方向</strong>：AI/ML领域影响力持续上升，预测2026年Q2影响力得分达775.3，是核心布局方向；云原生领域虽有小幅下降但基数仍高，需维持投入；区块链领域持续低迷，建议暂停新投入。</p>
+                    <p>2. <strong>编程语言方向</strong>：Python热度指数预计突破48，仍是AI领域核心语言；TypeScript增长稳定，适合Web项目长期布局；JavaScript维持高位，是前端基础核心；PHP、Ruby等传统语言持续下滑，建议逐步替换。</p>
+                    <p>3. <strong>组合建议</strong>：AI/ML+Python、Web开发+TypeScript是最优技术组合，两者相关性达0.78，投入回报率最高。</p>
+                    <button class="btn-secondary" id="copy-btn" style="margin-top: 1rem;">
+                        <i class="bi bi-clipboard"></i> 复制结论
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <p>© 2026 OpenInsight 开源项目分析平台</p>
+            </div>
+            <div class="footer-right">
+                <a href="#"><i class="bi bi-github"></i> GitHub</a>
+                <a href="#"><i class="bi bi-file-text"></i> 数据说明</a>
+                <a href="#"><i class="bi bi-question-circle"></i> 帮助中心</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 引入主逻辑脚本 -->
+    <script src="main.js"></script>
+</body>
+</html>
