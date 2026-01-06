@@ -2,93 +2,220 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>OpenInsight 基础可视化</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenInsight - 开源项目分析平台</title>
+    <!-- 引入CDN依赖 -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <style>
-        body { font-family: Arial; margin: 20px; }
-        .card { display: inline-block; width: 200px; padding: 20px; margin: 10px; background: #f0f0f0; border-radius: 8px; text-align: center; }
-        .metric { font-size: 2em; color: #007bff; font-weight: bold; }
-        #chart1, #chart2 { width: 100%; height: 400px; margin: 20px 0; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 10px; border: 1px solid #ddd; }
-        th { background: #f0f0f0; }
-    </style>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- 引入图标（可选，提升视觉） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
-    <h1>OpenInsight 开源项目分析平台</h1>
+    <!-- 顶部导航栏 -->
+    <header class="navbar">
+        <div class="navbar-logo">
+            <i class="bi bi-bar-chart-line"></i>
+            <span>OpenInsight</span>
+        </div>
+        <div class="navbar-menu">
+            <a href="#overview" class="active">平台概览</a>
+            <a href="#ranking">影响力排名</a>
+            <a href="#trends" class="disabled">技术趋势</a>
+            <a href="#qa" class="disabled">智能问答</a>
+        </div>
+        <div class="navbar-user">
+            <span class="date" id="current-date"></span>
+        </div>
+    </header>
 
-    <!-- 指标卡片 -->
-    <div class="card">
-        <h3>总项目数</h3>
-        <div id="total-projects" class="metric">--</div>
+    <!-- 主体容器：侧边栏 + 主内容 -->
+    <div class="main-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <a href="#overview" class="sidebar-item active">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>平台概览</span>
+                </a>
+                <a href="#ranking" class="sidebar-item">
+                    <i class="bi bi-trophy"></i>
+                    <span>影响力排名</span>
+                </a>
+                <a href="#trends" class="sidebar-item disabled">
+                    <i class="bi bi-line-chart"></i>
+                    <span>技术趋势</span>
+                </a>
+                <a href="#qa" class="sidebar-item disabled">
+                    <i class="bi bi-chat-dots"></i>
+                    <span>智能问答</span>
+                </a>
+                <a href="#data" class="sidebar-item disabled">
+                    <i class="bi bi-database"></i>
+                    <span>数据管理</span>
+                </a>
+            </div>
+            
+            <!-- 数据更新提示 -->
+            <div class="sidebar-footer">
+                <p><i class="bi bi-clock"></i> 数据更新时间</p>
+                <p class="update-time">2025-01-06</p>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="content">
+            <!-- 面包屑导航 -->
+            <div class="breadcrumb">
+                <a href="#">首页</a> / <span id="current-page">平台概览</span>
+            </div>
+
+            <!-- 平台概览模块 -->
+            <section id="overview" class="module">
+                <div class="module-header">
+                    <h2><i class="bi bi-speedometer2"></i> 平台数据概览</h2>
+                    <p>基于GitHub Top300开源项目的核心数据统计</p>
+                </div>
+
+                <!-- 指标卡片行 -->
+                <div class="metric-row">
+                    <div class="metric-card">
+                        <div class="card-icon bg-primary">
+                            <i class="bi bi-grid-1x2-fill"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">总项目数</div>
+                            <div class="card-value" id="total-projects">--</div>
+                            <div class="card-desc">覆盖Top300开源项目</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="card-icon bg-success">
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">总Star数</div>
+                            <div class="card-value" id="total-stars">--</div>
+                            <div class="card-desc">项目总关注度</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="card-icon bg-warning">
+                            <i class="bi bi-bar-chart-fill"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">平均影响力分数</div>
+                            <div class="card-value" id="avg-influence">--</div>
+                            <div class="card-desc">综合评分（0-10）</div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="card-icon bg-info">
+                            <i class="bi bi-code-slash"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">主流编程语言数</div>
+                            <div class="card-value" id="language-count">--</div>
+                            <div class="card-desc">覆盖核心开发语言</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表行：语言分布 -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>项目编程语言分布</h3>
+                            <span class="chart-desc">Top300项目语言占比</span>
+                        </div>
+                        <div class="chart-container" id="language-chart"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 影响力排名模块 -->
+            <section id="ranking" class="module">
+                <div class="module-header">
+                    <h2><i class="bi bi-trophy"></i> 项目影响力排名</h2>
+                    <p>按综合影响力分数排序（可按语言筛选）</p>
+                </div>
+
+                <!-- 筛选工具栏 -->
+                <div class="tool-bar">
+                    <div class="filter-group">
+                        <label for="language-filter"><i class="bi bi-filter"></i> 按语言筛选：</label>
+                        <select id="language-filter">
+                            <option value="all">所有语言</option>
+                        </select>
+                        <button id="refresh-btn" class="btn-primary"><i class="bi bi-arrow-clockwise"></i> 刷新排名</button>
+                    </div>
+                    <div class="search-group">
+                        <input type="text" id="repo-search" placeholder="搜索项目名称...">
+                        <button class="btn-secondary"><i class="bi bi-search"></i> 搜索</button>
+                    </div>
+                </div>
+
+                <!-- 图表行：Top10排名 -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>影响力Top10项目</h3>
+                            <span class="chart-desc">分数越高，项目综合影响力越强</span>
+                        </div>
+                        <div class="chart-container" id="ranking-chart"></div>
+                    </div>
+                </div>
+
+                <!-- 表格行：完整排名 -->
+                <div class="table-row">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>完整排名列表（Top300）</h3>
+                            <div class="table-actions">
+                                <button class="btn-secondary"><i class="bi bi-download"></i> 导出数据</button>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="ranking-table">
+                                <thead>
+                                    <tr>
+                                        <th width="80">排名</th>
+                                        <th width="300">项目名称</th>
+                                        <th width="120">编程语言</th>
+                                        <th width="150">影响力分数</th>
+                                        <th width="120">Star评分</th>
+                                        <th width="120">活跃度评分</th>
+                                        <th width="100">排名变化</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-    <div class="card">
-        <h3>总Star数</h3>
-        <div id="total-stars" class="metric">--</div>
-    </div>
-    <div class="card">
-        <h3>平均影响力</h3>
-        <div id="avg-influence" class="metric">--</div>
-    </div>
 
-    <!-- 语言分布图表 -->
-    <h2>编程语言分布</h2>
-    <div id="chart1"></div>
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <p>© 2025 OpenInsight 开源项目分析平台</p>
+            </div>
+            <div class="footer-right">
+                <a href="#"><i class="bi bi-github"></i> GitHub</a>
+                <a href="#"><i class="bi bi-file-text"></i> 数据说明</a>
+                <a href="#"><i class="bi bi-question-circle"></i> 帮助中心</a>
+            </div>
+        </div>
+    </footer>
 
-    <!-- 影响力Top10图表 -->
-    <h2>影响力Top10项目</h2>
-    <div id="chart2"></div>
-
-    <script>
-        // 加载概览数据
-        Papa.parse('data/dashboard_summary.csv', {
-            download: true,
-            header: true,
-            complete: function(res) {
-                const data = res.data;
-                // 填充指标
-                data.forEach(item => {
-                    if (item.metric_name === 'total_projects') document.getElementById('total-projects').textContent = item.metric_value;
-                    if (item.metric_name === 'total_stars') document.getElementById('total-stars').textContent = item.metric_value;
-                    if (item.metric_name === 'avg_influence_score') document.getElementById('avg-influence').textContent = item.metric_value;
-                });
-            }
-        });
-
-        // 加载排名数据
-        Papa.parse('data/influence_ranking.csv', {
-            download: true,
-            header: true,
-            complete: function(res) {
-                const rankingData = res.data.map(item => ({
-                    name: item.repo_name,
-                    lang: item.language || 'Unknown',
-                    score: parseFloat(item.influence_score) || 0
-                }));
-
-                // 1. 渲染语言分布图表
-                const langCount = {};
-                rankingData.forEach(item => langCount[item.lang] = (langCount[item.lang] || 0) + 1);
-                const chart1 = echarts.init(document.getElementById('chart1'));
-                chart1.setOption({
-                    tooltip: { trigger: 'item' },
-                    series: [{
-                        type: 'pie',
-                        data: Object.entries(langCount).map(([k, v]) => ({ name: k, value: v }))
-                    }]
-                });
-
-                // 2. 渲染Top10图表
-                const top10 = [...rankingData].sort((a, b) => b.score - a.score).slice(0, 10);
-                const chart2 = echarts.init(document.getElementById('chart2'));
-                chart2.setOption({
-                    xAxis: { type: 'category', data: top10.map(item => item.name) },
-                    yAxis: { type: 'value' },
-                    series: [{ type: 'bar', data: top10.map(item => item.score) }]
-                });
-            }
-        });
-    </script>
+    <!-- 引入主逻辑脚本 -->
+    <script src="js/main.js"></script>
 </body>
 </html>
