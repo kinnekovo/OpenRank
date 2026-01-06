@@ -17,6 +17,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 3. 绑定展开/收起按钮事件
     document.getElementById('toggle-btn').addEventListener('click', toggleTableView);
+
+    // 新增：语言筛选器change事件，同步更新表格和图表
+    const languageFilter = document.getElementById('language-filter');
+    if (languageFilter) {
+        languageFilter.addEventListener('change', function() {
+            renderRankingChart();
+            renderRankingTable();
+        });
+    }
 });
 
 /**
@@ -328,33 +337,46 @@ function toggleTableView() {
 }
 
 /**
- * 渲染完整排名表格
+ * 渲染完整排名表格（新增语言筛选功能）
  */
 function renderRankingTable() {
-    // 获取筛选条件
-    const selectedLanguage = document.getElementById('language-filter').value;
+    const tableBody = document.querySelector('#ranking-table tbody');
+    if (!tableBody) {
+        console.warn('⚠️ 未找到ranking-table tbody DOM元素');
+        return;
+    }
+
+    // 新增：获取语言筛选器的选中值（复用现有筛选器）
+    const filterSelect = document.getElementById('language-filter');
+    const selectedLanguage = filterSelect ? filterSelect.value : 'all';
     
-    // 筛选数据
+    // 新增：根据选中语言筛选数据
     let filteredData = rankingData;
     if (selectedLanguage !== 'all') {
-        filteredData = rankingData.filter(item => item.language === selectedLanguage);
+        filteredData = rankingData.filter(item => {
+            // 匹配项目的language字段
+            return item.language === selectedLanguage;
+        });
     }
     
-    // 按影响力分数降序排序
-    const sortedData = [...filteredData].sort((a, b) => b.influence_score - a.influence_score);
+    // 按影响力分数降序排序（基于筛选后的数据）
+    const sortedData = [...filteredData].sort((a, b) => {
+        const scoreA = Number(a.influence_score) || 0;
+        const scoreB = Number(b.influence_score) || 0;
+        return scoreB - scoreA;
+    });
 
-    // 控制显示数量
+    // 展开/收起逻辑（保留原有）
     const displayData = isExpanded ? sortedData : sortedData.slice(0, 15);
 
-    // 获取表格tbody
-    const tableBody = document.querySelector('#ranking-table tbody');
+    // 清空表格内容
     tableBody.innerHTML = '';
 
-    // 填充表格数据
+    // 填充表格数据（使用筛选后的displayData）
     displayData.forEach((item, index) => {
         const tr = document.createElement('tr');
         
-        // 排名变化样式类
+        // 排名变化样式类（保留原有）
         let rankChangeClass = 'rank-stable';
         let rankChangeText = '→';
         if (item.ranking_change > 0) {
@@ -367,25 +389,29 @@ function renderRankingTable() {
 
         tr.innerHTML = `
             <td>${index + 1}</td>
-            <td>${item.repo_name}</td>
+            <td>${item.repo_name || '未知项目'}</td>
             <td>${item.language || 'Unknown'}</td>
-            <td>${item.influence_score.toFixed(2)}</td>
-            <td>${item.stars_score.toFixed(2)}</td>
-            <td>${item.activity_score.toFixed(2)}</td>
+            <td>${(Number(item.influence_score) || 0).toFixed(2)}</td>
+            <td>${(Number(item.stars_score) || 0).toFixed(2)}</td>
+            <td>${(Number(item.activity_score) || 0).toFixed(2)}</td>
             <td class="${rankChangeClass}">${rankChangeText}</td>
         `;
         
         tableBody.appendChild(tr);
     });
-    
-    // 如果有更多记录，添加"查看更多"行
-    if (!isExpanded && sortedData.length > 15) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td colspan="7" style="text-align: center; padding: 10px;">
-                <span>共 ${sortedData.length} 条记录，当前显示前15条</span>
-            </td>
-        `;
-        tableBody.appendChild(tr);
+
+    // 数据条数提示（更新为筛选后的数据量）
+    const tableContainer = tableBody.parentElement.parentElement;
+    let tipElement = document.getElementById('table-tip');
+    if (!tipElement) {
+        tipElement = document.createElement('div');
+        tipElement.id = 'table-tip';
+        tipElement.style = 'margin-top: 8px; color: #666; font-size: 12px; text-align: right;';
+        tableContainer.after(tipElement);
+    }
+    if (sortedData.length > 15 && !isExpanded) {
+        tipElement.textContent = `当前显示前15条，共${sortedData.length}条数据`;
+    } else {
+        tipElement.textContent = `共${sortedData.length}条数据`;
     }
 }
