@@ -15,7 +15,7 @@ class GitHubDataLoader:
         if data_path is None:
             # 获取当前脚本所在目录，然后构造数据路径
             current_dir = Path(__file__).parent
-            self.data_path = current_dir.parent / "data" / "top_300_metrics"
+            self.data_path = current_dir.parent / "raw_data" / "top_300_metrics"
         else:
             self.data_path = Path(data_path)
         self.metrics_files = {
@@ -348,9 +348,9 @@ class GitHubDataLoader:
         return df
     
     def get_project_languages(self):
-        """从项目路径推断主要编程语言（简化版本）"""
-        # 这里可以根据项目名称推断语言，实际情况中应该从meta数据获取
+        """从项目路径推断主要编程语言"""
         language_mapping = {
+            # 已有的映射
             'react': 'JavaScript',
             'angular': 'TypeScript', 
             'vue': 'JavaScript',
@@ -395,7 +395,312 @@ class GitHubDataLoader:
             'codeql': 'JavaScript',
             'gitpod': 'TypeScript',
             'gitea': 'Go',
-            'godot': 'C++'
+            'godot': 'C++',
+            
+            # 新增映射 - 前端框架和UI库
+            'ant-design': 'TypeScript',
+            'material-ui': 'TypeScript',
+            'tailwindcss': 'JavaScript',
+            'bootstrap': 'JavaScript',
+            'next.js': 'JavaScript',
+            'nuxt.js': 'JavaScript',
+            'svelte': 'JavaScript',
+            'lit': 'TypeScript',
+            'webcomponents': 'JavaScript',
+            'angular-components': 'TypeScript',
+            
+            # 新增映射 - Java项目
+            'nacos': 'Java',
+            'dolphinscheduler': 'Java',
+            'shardingsphere': 'Java',
+            'rocketmq': 'Java',
+            'seata': 'Java',
+            'sentinel': 'Java',
+            'dubbo': 'Java',
+            'hadoop': 'Java',
+            'hbase': 'Java',
+            'hive': 'Java',
+            'zookeeper': 'Java',
+            'kafka': 'Java',
+            'azure-sdk-for-java': 'Java',
+            'clickhouse': 'C++',
+            
+            # 新增映射 - Python项目
+            'airbyte': 'Python',
+            'jupyter': 'Python',
+            'pandas': 'Python',
+            'numpy': 'Python',
+            'scipy': 'Python',
+            'scikit-learn': 'Python',
+            'matplotlib': 'Python',
+            'requests': 'Python',
+            'flask': 'Python',
+            'fastapi': 'Python',
+            'celery': 'Python',
+            'redis-py': 'Python',
+            'azure-sdk-for-python': 'Python',
+            'bitcoin': 'C++',
+            'chia-blockchain': 'Python',
+            
+            # 新增映射 - Go项目
+            'etcd': 'Go',
+            'prometheus': 'Go',
+            'grafana': 'Go',
+            'consul': 'Go',
+            'nats': 'Go',
+            'vitess': 'Go',
+            'influxdb': 'Go',
+            'argo-cd': 'Go',
+            'kubevirt': 'Go',
+            'lens': 'TypeScript',
+            
+            # 新增映射 - TypeScript/JavaScript项目
+            'jetpack': 'JavaScript',
+            'wp-calypso': 'JavaScript',
+            'amplify-cli': 'TypeScript',
+            'appsmith': 'TypeScript',
+            'stable-diffusion-webui': 'Python',
+            'angular-cli': 'TypeScript',
+            'rxjs': 'TypeScript',
+            'azure-sdk-for-js': 'TypeScript',
+            'backstage': 'TypeScript',
+            'brave-browser': 'JavaScript',
+            'brave-core': 'C++',
+            
+            # 新增映射 - C++项目
+            'opencv': 'C++',
+            'ffmpeg': 'C++',
+            'qt': 'C++',
+            'llvm': 'C++',
+            'clang': 'C++',
+            'cmake': 'C++',
+            'azerothcore': 'C++',
+            'wotlk': 'C++',
+            
+            # 新增映射 - C#项目
+            'azure-cli': 'Python',
+            'azure-powershell': 'PowerShell',
+            'dotnet': 'C#',
+            'aspnet': 'C#',
+            'xamarin': 'C#',
+            'azure-sdk-for-net': 'C#',
+            
+            # 新增映射 - 移动开发
+            'Anki-Android': 'Java',
+            'ankidroid': 'Java',
+            'ardupilot': 'C++',
+            
+            # 新增映射 - 其他语言
+            'AdguardFilters': 'JavaScript',
+            'testnets': 'Rust',
+            'rest-api-specs': 'OpenAPI',
+            'bevy': 'Rust',
+            'bitnami-charts': 'YAML',
+            'laravel': 'PHP',
+            'mathlib': 'Lean',
+            'bioconda-recipes': 'Python',
+            'cataclysm-dda': 'C++',
+            
+            # 新增映射 - 前50个Unknown语言项目
+            'components': 'TypeScript',  # angular/components
+            'Anki-Android': 'Java',  # ankidroid/Anki-Android
+            'azerothcore-wotlk': 'C++',  # azerothcore/azerothcore-wotlk
+            'azure-rest-api-specs': 'OpenAPI',  # Azure/azure-rest-api-specs
+            'charts': 'YAML',  # bitnami/charts
+            'cloudflare-docs': 'JavaScript',  # cloudflare/cloudflare-docs
+            'cockroach': 'Go',  # cockroachdb/cockroach
+            'conan-center-index': 'Python',  # conan-io/conan-center-index
+            'staged-recipes': 'Python',  # conda-forge/staged-recipes
+            'lede': 'C',  # coolsnowwolf/lede
+            'cypress': 'JavaScript',  # cypress-io/cypress
+            'darktable': 'C',  # darktable-org/darktable
+            'datadog-agent': 'Go',  # DataDog/datadog-agent
+            'DefinitelyTyped': 'TypeScript',  # DefinitelyTyped/DefinitelyTyped
+            'content': 'Python',  # demisto/content
+            'va.gov-team': 'JavaScript',  # department-of-veterans-affairs/va.gov-team
+            'desktop': 'TypeScript',  # desktop/desktop
+            'directus': 'TypeScript',  # directus/directus
+            'docs': 'JavaScript',  # docker/docs, dotnet/docs, github/docs
+            'AspNetCore.Docs': 'C#',  # dotnet/AspNetCore.Docs
+            'GitHubGraduation-2022': 'JavaScript',  # education/GitHubGraduation-2022
+            'elasticsearch': 'Java',  # elastic/elasticsearch
+            'kibana': 'TypeScript',  # elastic/kibana
+            'elf-council-frontend': 'TypeScript',  # element-fi/elf-council-frontend
+            'element-plus': 'TypeScript',  # element-plus/element-plus
+            'elementor': 'PHP',  # elementor/elementor
+            'envoy': 'C++',  # envoyproxy/envoy
+            'esp-idf': 'C',  # espressif/esp-idf
+            'ethereum-org-website': 'JavaScript',  # ethereum/ethereum-org-website
+            'App': 'JavaScript',  # Expensify/App
+            'react-native': 'JavaScript',  # facebook/react-native
+            'filecoin-plus-large-datasets': 'Go',  # filecoin-project/filecoin-plus-large-datasets
+            'Files': 'C#',  # files-community/Files
+            'firebase-android-sdk': 'Java',  # firebase/firebase-android-sdk
+            'flutterfire': 'Dart',  # firebase/flutterfire
+            'first-contributions': 'JavaScript',  # firstcontributions/first-contributions
+            'flathub': 'Python',  # flathub/flathub
+            'engine': 'C++',  # flutter/engine
+            'flutter': 'Dart',  # flutter/flutter
+            'plugins': 'Dart',  # flutter/plugins
+            'a32nx': 'JavaScript',  # flybywiresim/a32nx
+            'hyperblog': 'JavaScript',  # freddier/hyperblog
+            'go': 'Go',  # golang/go
+            'it-cert-automation-practice': 'Python',  # google/it-cert-automation-practice
+            'signclav2-probe-repo': 'Go',  # google-test/signclav2-probe-repo
+            'developer.chrome.com': 'JavaScript',  # GoogleChrome/developer.chrome.com
+            'gradle': 'Java',  # gradle/gradle
+            'adguardfilters': 'JavaScript',          # AdguardTeam/AdguardFilters
+            'anki-android': 'Java',                  # ankidroid/Anki-Android
+            'definitelytyped': 'TypeScript',         # DefinitelyTyped/DefinitelyTyped
+            'aspnetcore.docs': 'C#',                 # dotnet/AspNetCore.Docs
+            'githubgraduation-2022': 'JavaScript',   # education/GitHubGraduation-2022
+            'app': 'JavaScript',                     # Expensify/App
+            'files': 'C#',                           # files-community/Files
+            'loki': 'Go',                            # grafana/loki
+            'teleport': 'Go',                        # gravitational/teleport
+            'grpc': 'C++',                           # grpc/grpc
+            'terraform-provider-aws': 'Go',          # hashicorp/terraform-provider-aws
+            'terraform-provider-azurerm': 'Go',      # hashicorp/terraform-provider-azurerm
+            'vault': 'Go',                           # hashicorp/vault
+            'denylist': 'Python',                    # helium/denylist
+            'helix': 'Rust',                         # helix-editor/helix
+            'core': 'Python',                        # home-assistant/core
+            'frontend': 'TypeScript',                # home-assistant/frontend
+            'home-assistant.io': 'JavaScript',       # home-assistant/home-assistant.io
+            'homebrew-cask': 'Ruby',                 # Homebrew/homebrew-cask
+            'homebrew-core': 'Ruby',                 # Homebrew/homebrew-core
+            'transformers': 'Python',                # huggingface/transformers
+            'keep-pipeline-tests-resources': 'Python', # idsb3t1/KEEP-pipeline-tests-resources
+            'telegraf': 'Go',                        # influxdata/telegraf
+            'librealsense': 'C++',                   # IntelRealSense/librealsense
+            'istio': 'Go',                           # istio/istio
+            'testissues': 'Python',                  # JacksonKearl/testissues
+            'swot': 'Java',                          # JetBrains/swot
+            'jitsi-meet': 'JavaScript',              # jitsi/jitsi-meet
+            'patchwork': 'JavaScript',               # jlord/patchwork
+            'joomla-cms': 'PHP',                     # joomla/joomla-cms
+            'julia': 'Julia',                        # JuliaLang/julia
+            'general': 'Julia',                      # JuliaRegistries/General
+            'kaiserreich-4': 'Lua',                  # Kaiserreich/Kaiserreich-4
+            'keycloak': 'Java',                      # keycloak/keycloak
+            'zigbee2mqtt': 'JavaScript',             # Koenkk/zigbee2mqtt
+            'minikube': 'Go',                        # kubernetes/minikube
+            'test-infra': 'Go',                      # kubernetes/test-infra
+            'website': 'JavaScript',                 # kubernetes/website
+            'framework': 'PHP',                      # laravel/framework
+            'leetcode-feedback': 'JavaScript',       # LeetCode-Feedback/LeetCode-Feedback
+            'lightning': 'Python',                   # Lightning-AI/lightning
+            'llvm-project': 'C++',                   # llvm/llvm-project
+            'logseq': 'Clojure',                     # logseq/logseq
+            'macports-ports': 'Tcl',                 # macports/macports-ports
+            'magento2': 'PHP',                       # magento/magento2
+            'marlin': 'C++',                         # MarlinFirmware/Marlin
+            'mastodon': 'Ruby',                      # mastodon/mastodon
+            'synapse': 'Python',                     # matrix-org/synapse
+            'mattermost-webapp': 'TypeScript',       # mattermost/mattermost-webapp
+            'translated-content': 'HTML',
+
+            'metabase': 'Clojure',                    # metabase/metabase
+            'eth-phishing-detect': 'JavaScript',      # MetaMask/eth-phishing-detect
+            'metamask-extension': 'JavaScript',       # MetaMask/metamask-extension
+            'metersphere': 'Java',                    # metersphere/metersphere
+            'azuredatastudio': 'TypeScript',          # microsoft/azuredatastudio
+            'fluentui': 'TypeScript',                 # microsoft/fluentui
+            'onnxruntime': 'C++',                     # microsoft/onnxruntime
+            'playwright': 'TypeScript',               # microsoft/playwright
+            'powertoys': 'C#',                        # microsoft/PowerToys
+            'terminal': 'C++',                        # microsoft/terminal
+            'typescript': 'TypeScript',               # microsoft/TypeScript
+            'vcpkg': 'C++',                           # microsoft/vcpkg
+            'vscode': 'TypeScript',                   # microsoft/vscode
+            'vscode-jupyter': 'TypeScript',           # microsoft/vscode-jupyter
+            'winget-pkgs': 'YAML',                    # microsoft/winget-pkgs
+            'wsl': 'C++',                             # microsoft/WSL
+            'azure-docs': 'Markdown',                 # MicrosoftDocs/azure-docs
+            'microsoft-365-docs': 'Markdown',         # MicrosoftDocs/microsoft-365-docs
+            'msteams-docs': 'Markdown',               # MicrosoftDocs/msteams-docs
+            'microsoft-graph-docs': 'Markdown',       # microsoftgraph/microsoft-graph-docs
+            'mlflow': 'Python',                       # mlflow/mlflow
+            'fenix': 'Kotlin',                        # mozilla-mobile/fenix
+            'three.js': 'JavaScript',                 # mrdoob/three.js
+            'mui-x': 'TypeScript',                    # mui/mui-x
+            'neovim': 'C',                            # neovim/neovim
+            'docs-website': 'JavaScript',             # newrelic/docs-website
+            'server': 'PHP',                          # nextcloud/server
+            'nixpkgs': 'Nix',                         # NixOS/nixpkgs
+            'node': 'JavaScript',                     # nodejs/node (核心是JS，底层C++)
+            'sdk-nrf': 'C',                           # nrfconnect/sdk-nrf
+            'nx': 'TypeScript',                       # nrwl/nx
+            'o3de': 'C++',                            # o3de/o3de
+            'obs-studio': 'C++',                      # obsproject/obs-studio
+            'odoo': 'Python',                         # odoo/odoo
+            'mmdetection': 'Python',                  # open-mmlab/mmdetection
+            'opentelemetry-collector-contrib': 'Go',  # open-telemetry/opentelemetry-collector-contrib
+            'openapi-generator': 'Java',              # OpenAPITools/openapi-generator
+            'openhab-addons': 'Java',                 # openhab/openhab-addons
+            'jdk': 'Java',                            # openjdk/jdk
+            'joss-reviews': 'Python',                 # openjournals/joss-reviews
+            'openshift-docs': 'Markdown',             # openshift/openshift-docs
+            'release': 'Go',                          # openshift/release
+            'openssl': 'C',                           # openssl/openssl
+            'openvino': 'C++',                        # openvinotoolkit/openvino
+            'openwrt': 'C',                           # openwrt/openwrt
+            'oppia': 'Python',                        # oppia/oppia
+            'paddle': 'Python',                       # PaddlePaddle/Paddle
+            'paddleocr': 'Python',                    # PaddlePaddle/PaddleOCR
+            'php-src': 'C',                           # php/php-src
+            'tidb': 'Go',                             # pingcap/tidb
+
+            'android-issues': 'Java',                  # PixelExperience/android-issues
+            'postman-app-support': 'JavaScript',       # postmanlabs/postman-app-support
+            'powershell': 'C#',                        # PowerShell/PowerShell
+            'osu': 'C#',                               # ppy/osu
+            'prestashop': 'PHP',                       # PrestaShop/PrestaShop
+            'prisma': 'TypeScript',                    # prisma/prisma
+            'connectedhomeip': 'C++',                  # project-chip/connectedhomeip (Matter协议)
+            'prusaslicer': 'C++',                      # prusa3d/PrusaSlicer
+            'cpython': 'C',                            # python/cpython (Python源码)
+            'qbittorrent': 'C++',                      # qbittorrent/qBittorrent
+            'qgis': 'C++',                             # qgis/QGIS
+            'qmk_firmware': 'C',                       # qmk/qmk_firmware (键盘固件)
+            'quarkus': 'Java',                         # quarkusio/quarkus (Java微服务框架)
+            'rails': 'Ruby',                           # rails/rails (Ruby Web框架)
+            'rancher': 'Go',                           # rancher/rancher (K8s管理)
+            'metasploit-framework': 'Ruby',            # rapid7/metasploit-framework
+            'ray': 'Python',                           # ray-project/ray (分布式框架)
+            'extensions': 'TypeScript',                # raycast/extensions
+            'redis': 'C',                              # redis/redis
+            'barotrauma': 'C#',                        # Regalis11/Barotrauma
+            'remix': 'TypeScript',                     # remix-run/remix (React框架)
+            'renovate': 'TypeScript',                  # renovatebot/renovate
+            'rocket.chat': 'TypeScript',               # RocketChat/Rocket.Chat
+            'rpcs3': 'C++',                            # RPCS3/rpcs3 (PS3模拟器)
+            'rstudio': 'R',                            # rstudio/rstudio (R语言IDE)
+            'ruffle': 'Rust',                          # ruffle-rs/ruffle (Flash模拟器)
+            'rust': 'Rust',                            # rust-lang/rust
+            'engineering-education': 'Markdown',       # section-engineering-education/engineering-education
+            'serenity': 'C++',                         # SerenityOS/serenity
+            'fnf-psychengine': 'GML',                  # ShadowMario/FNF-PsychEngine (GameMaker语言)
+            'skyrat-tg': 'Python',                     # Skyrat-SS13/Skyrat-tg (SS13模组)
+            'solana': 'Rust',                          # solana-labs/solana
+            'token-list': 'TypeScript',                # solana-labs/token-list
+            'sourcegraph': 'TypeScript',               # sourcegraph/sourcegraph (前端核心)
+            'spack': 'Python',                         # spack/spack (包管理)
+            'spyder': 'Python',                        # spyder-ide/spyder (Python IDE)
+            'storybook': 'TypeScript',                 # storybookjs/storybook
+            'strapi': 'TypeScript',                    # strapi/strapi (Node.js CMS)
+            'kit': 'JavaScript',                       # sveltejs/kit (Svelte框架)
+            'symfony': 'PHP',                          # symfony/symfony (PHP框架)
+            'systemd': 'C',                            # systemd/systemd (Linux系统服务)
+            'tachiyomi': 'Kotlin',                     # tachiyomiorg/tachiyomi (安卓APP)
+            'tachiyomi-extensions': 'Kotlin',          # tachiyomiorg/tachiyomi-extensions
+            'tailscale': 'Go',                         # tailscale/tailscale
+            'tdengine': 'C',                           # taosdata/TDengine (时序数据库)
+            'typroaction': 'TypeScript',               # taozhiyu/TyProAction
+            'newpipe': 'Java',                         # TeamNewPipe/NewPipe (安卓APP)
+            'termux-packages': 'Shell',                # termux/termux-packages
+            'tgstation': 'Python',                     # tgstation/tgstation
+            'tokens': 'TypeScript',                    # TP-Lab/tokens
         }
         
         return language_mapping

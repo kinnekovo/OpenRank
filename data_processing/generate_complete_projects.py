@@ -39,8 +39,8 @@ def main():
     print(f"✅ 成功处理了 {len(projects_df)} 个项目的数据")
     
     # 保存到CSV文件
-    output_path = "data/processed/projects_complete.csv"
-    os.makedirs("data/processed", exist_ok=True)
+    output_path = "data/projects_complete.csv"
+    os.makedirs("data", exist_ok=True)
     
     projects_df.to_csv(output_path, index=False)
     print(f"✅ 已保存完整项目数据到: {output_path}")

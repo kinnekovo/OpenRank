@@ -108,8 +108,8 @@ class ModuleDataGenerator:
         
         # 保存数据
         df = pd.DataFrame(language_trends)
-        os.makedirs('data/processed', exist_ok=True)
-        df.to_csv('data/processed/language_trends_detailed.csv', index=False)
+        os.makedirs('data', exist_ok=True)
+        df.to_csv('data/language_trends_detailed.csv', index=False)
         print(f"✅ 已生成语言趋势数据: {len(df)} 条记录")
         print(f"包含语言: {list(language_stats.keys())}")
         
