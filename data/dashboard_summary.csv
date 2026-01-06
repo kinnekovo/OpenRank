@@ -1,13 +1,13 @@
 metric_name,metric_value,metric_description,data_source,last_updated
-total_projects,300,项目总数,projects_complete.csv,2025-12-30 14:00:38
-total_stars,110691,总Star数,projects_complete.csv,2025-12-30 14:00:38
-avg_influence_score,5.07,平均影响力分数,projects_complete.csv,2025-12-30 14:00:38
-top_language,Unknown,最受欢迎编程语言,projects_complete.csv,2025-12-30 14:00:38
-top_language_count,259,最受欢迎语言项目数,projects_complete.csv,2025-12-30 14:00:38
-positive_trend_ratio,34.33,正增长项目比例(%),projects_complete.csv,2025-12-30 14:00:38
-negative_trend_ratio,62.33,负增长项目比例(%),projects_complete.csv,2025-12-30 14:00:38
-high_impact_projects,0,高影响力项目数量,projects_complete.csv,2025-12-30 14:00:38
-emerging_languages,259,新兴语言项目数量,projects_complete.csv,2025-12-30 14:00:38
-community_health_avg,141.29,平均社区健康度,projects_complete.csv,2025-12-30 14:00:38
-activity_growth_rate,0.0323,平均活动度增长率,projects_complete.csv,2025-12-30 14:00:38
-star_growth_rate,-0.0306,平均Star增长率,projects_complete.csv,2025-12-30 14:00:38
+total_projects,300,项目总数,projects_complete.csv,2026-01-06 14:52:29
+total_stars,110691,总Star数,projects_complete.csv,2026-01-06 14:52:29
+avg_influence_score,5.07,平均影响力分数,projects_complete.csv,2026-01-06 14:52:29
+top_language,Python,最受欢迎编程语言,projects_complete.csv,2026-01-06 14:52:29
+top_language_count,41,最受欢迎语言项目数,projects_complete.csv,2026-01-06 14:52:29
+positive_trend_ratio,34.33,正增长项目比例(%),projects_complete.csv,2026-01-06 14:52:29
+negative_trend_ratio,62.33,负增长项目比例(%),projects_complete.csv,2026-01-06 14:52:29
+high_impact_projects,0,高影响力项目数量,projects_complete.csv,2026-01-06 14:52:29
+emerging_languages,24,新兴语言项目数量,projects_complete.csv,2026-01-06 14:52:29
+community_health_avg,141.29,平均社区健康度,projects_complete.csv,2026-01-06 14:52:29
+activity_growth_rate,0.0323,平均活动度增长率,projects_complete.csv,2026-01-06 14:52:29
+star_growth_rate,-0.0306,平均Star增长率,projects_complete.csv,2026-01-06 14:52:29

@@ -1,0 +1,7 @@
+数据层：
+python data_processing/generate_complete_projects.py
+python data_processing/generate_module_support_data.py
+
+网页测试：
+python -m http.server 8000
+http://localhost:8000

@@ -174,7 +174,7 @@ class ModuleDataGenerator:
         
         # 保存数据
         df = pd.DataFrame(keyword_trends)
-        df.to_csv('data/processed/keyword_trends.csv', index=False)
+        df.to_csv('data/keyword_trends.csv', index=False)
         print(f"✅ 已生成关键词趋势数据: {len(df)} 条记录")
         print(f"包含关键词类别: {list(keywords.keys())}")
         
@@ -266,7 +266,7 @@ class ModuleDataGenerator:
         
         # 保存数据
         df = pd.DataFrame(maturity_data)
-        df.to_csv('data/processed/technology_maturity.csv', index=False)
+        df.to_csv('data/technology_maturity.csv', index=False)
         print(f"✅ 已生成技术成熟度数据: {len(df)} 条记录")
         print(f"成熟度分布: {df['maturity_stage'].value_counts().to_dict()}")
         
@@ -373,7 +373,7 @@ class ModuleDataGenerator:
         influence_df['rank'] = range(1, len(influence_df) + 1)
         
         # 保存数据
-        influence_df.to_csv('data/processed/influence_ranking.csv', index=False)
+        influence_df.to_csv('data/influence_ranking.csv', index=False)
         print(f"✅ 已生成影响力排名数据: {len(influence_df)} 条记录")
         print(f"排名分布: {influence_df['influence_tier'].value_counts().to_dict()}")
         
@@ -491,7 +491,7 @@ class ModuleDataGenerator:
         
         # 保存数据
         df = pd.DataFrame(faq_data)
-        df.to_csv('data/processed/faq_dataset.csv', index=False)
+        df.to_csv('data/faq_dataset.csv', index=False)
         print(f"✅ 已生成FAQ数据: {len(df)} 条记录")
         
         return df
@@ -569,7 +569,7 @@ class ModuleDataGenerator:
         
         # 保存数据
         df = pd.DataFrame(dashboard_data)
-        df.to_csv('data/processed/dashboard_summary.csv', index=False)
+        df.to_csv('data/dashboard_summary.csv', index=False)
         print(f"✅ 已生成仪表盘汇总数据: {len(df)} 条记录")
         
         return df
@@ -598,7 +598,7 @@ class ModuleDataGenerator:
         ]
         
         for file in csv_files:
-            if os.path.exists(f'data/processed/{file}'):
+            if os.path.exists(f'data/{file}'):
                 print(f"✅ {file}")
             else:
                 print(f"❌ {file} - 生成失败")
