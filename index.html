@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>OpenInsight 基础可视化</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        .card { display: inline-block; width: 200px; padding: 20px; margin: 10px; background: #f0f0f0; border-radius: 8px; text-align: center; }
+        .metric { font-size: 2em; color: #007bff; font-weight: bold; }
+        #chart1, #chart2 { width: 100%; height: 400px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ddd; }
+        th { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>OpenInsight 开源项目分析平台</h1>
+
+    <!-- 指标卡片 -->
+    <div class="card">
+        <h3>总项目数</h3>
+        <div id="total-projects" class="metric">--</div>
+    </div>
+    <div class="card">
+        <h3>总Star数</h3>
+        <div id="total-stars" class="metric">--</div>
+    </div>
+    <div class="card">
+        <h3>平均影响力</h3>
+        <div id="avg-influence" class="metric">--</div>
+    </div>
+
+    <!-- 语言分布图表 -->
+    <h2>编程语言分布</h2>
+    <div id="chart1"></div>
+
+    <!-- 影响力Top10图表 -->
+    <h2>影响力Top10项目</h2>
+    <div id="chart2"></div>
+
+    <script>
+        // 加载概览数据
+        Papa.parse('data/dashboard_summary.csv', {
+            download: true,
+            header: true,
+            complete: function(res) {
+                const data = res.data;
+                // 填充指标
+                data.forEach(item => {
+                    if (item.metric_name === 'total_projects') document.getElementById('total-projects').textContent = item.metric_value;
+                    if (item.metric_name === 'total_stars') document.getElementById('total-stars').textContent = item.metric_value;
+                    if (item.metric_name === 'avg_influence_score') document.getElementById('avg-influence').textContent = item.metric_value;
+                });
+            }
+        });
+
+        // 加载排名数据
+        Papa.parse('data/influence_ranking.csv', {
+            download: true,
+            header: true,
+            complete: function(res) {
+                const rankingData = res.data.map(item => ({
+                    name: item.repo_name,
+                    lang: item.language || 'Unknown',
+                    score: parseFloat(item.influence_score) || 0
+                }));
+
+                // 1. 渲染语言分布图表
+                const langCount = {};
+                rankingData.forEach(item => langCount[item.lang] = (langCount[item.lang] || 0) + 1);
+                const chart1 = echarts.init(document.getElementById('chart1'));
+                chart1.setOption({
+                    tooltip: { trigger: 'item' },
+                    series: [{
+                        type: 'pie',
+                        data: Object.entries(langCount).map(([k, v]) => ({ name: k, value: v }))
+                    }]
+                });
+
+                // 2. 渲染Top10图表
+                const top10 = [...rankingData].sort((a, b) => b.score - a.score).slice(0, 10);
+                const chart2 = echarts.init(document.getElementById('chart2'));
+                chart2.setOption({
+                    xAxis: { type: 'category', data: top10.map(item => item.name) },
+                    yAxis: { type: 'value' },
+                    series: [{ type: 'bar', data: top10.map(item => item.score) }]
+                });
+            }
+        });
+    </script>
+</body>
+</html>
