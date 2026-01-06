@@ -74,12 +74,12 @@ function loadCSVData() {
  * 渲染平台概览指标卡片
  */
 function renderDashboardMetrics() {
-    // 查找对应指标并渲染
+    // 修正ID映射，直接对应HTML中metric-value元素的id
     const metricsMap = {
-        'total_projects': 'card-total-projects',
-        'total_stars': 'card-total-stars',
-        'avg_influence_score': 'card-avg-influence',
-        'main_language_count': 'card-language-count'
+        'total_projects': 'total-projects',
+        'total_stars': 'total-stars',
+        'avg_influence_score': 'avg-influence',
+        'main_language_count': 'language-count'
     };
 
     dashboardData.forEach(item => {
@@ -87,7 +87,11 @@ function renderDashboardMetrics() {
         const metricValue = item.metric_value;
         
         if (metricsMap[metricName]) {
-            document.querySelector(`#${metricsMap[metricName]} .metric-value`).textContent = metricValue;
+            // 直接通过ID获取数值元素，无需额外查找子元素
+            const element = document.getElementById(metricsMap[metricName]);
+            if (element) { // 增加存在性检查，避免null错误
+                element.textContent = metricValue;
+            }
         }
     });
 }
