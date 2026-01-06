@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function loadCSVData() {
     // 加载dashboard_summary.csv
-    Papa.parse('data/dashboard_summary.csv', {
+    Papa.parse('../data/dashboard_summary.csv', {
         download: true,
         header: true,
         complete: function(results) {
@@ -47,7 +47,7 @@ function loadCSVData() {
     });
 
     // 加载influence_ranking.csv
-    Papa.parse('data/influence_ranking.csv', {
+    Papa.parse('../data/influence_ranking.csv', {
         download: true,
         header: true,
         complete: function(results) {
