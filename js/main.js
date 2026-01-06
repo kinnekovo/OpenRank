@@ -2,6 +2,7 @@
 let dashboardData = [];    // 平台概览数据
 let rankingData = [];      // 影响力排名数据
 let allLanguages = [];     // 所有编程语言列表
+let isExpanded = false;    // 控制表格展开/收起状态
 
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
@@ -13,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
         renderRankingChart();
         renderRankingTable();
     });
+    
+    // 3. 绑定展开/收起按钮事件
+    document.getElementById('toggle-btn').addEventListener('click', toggleTableView);
 });
 
 /**
@@ -189,31 +193,48 @@ function renderLanguageChart() {
 }
 
 /**
- * 渲染影响力排名Top10图表
+ * 渲染影响力排名Top10图表（修复纵轴标尺+标签字符问题）
  */
 function renderRankingChart() {
-    // 获取筛选条件
-    const selectedLanguage = document.getElementById('language-filter').value;
+    const chartDom = document.getElementById('ranking-chart');
+    if (!chartDom) {
+        console.warn('⚠️ 未找到ranking-chart DOM元素');
+        return;
+    }
+
+    const filterSelect = document.getElementById('language-filter');
+    const selectedLanguage = filterSelect ? filterSelect.value : 'all';
     
-    // 筛选数据
+    // 筛选数据 + 强制转换为数字类型（核心修复：确保分数是数字）
     let filteredData = rankingData;
     if (selectedLanguage !== 'all') {
         filteredData = rankingData.filter(item => item.language === selectedLanguage);
     }
     
-    // 按影响力分数降序排序，取Top10
+    // 排序并取Top10，同时确保influence_score是数字
     const top10Data = [...filteredData]
-        .sort((a, b) => b.influence_score - a.influence_score)
+        .sort((a, b) => {
+            // 强制转换为数字，避免字符串排序错误
+            const scoreA = Number(a.influence_score) || 0;
+            const scoreB = Number(b.influence_score) || 0;
+            return scoreB - scoreA;
+        })
         .slice(0, 10);
 
-    // 准备图表数据
-    const xAxisData = top10Data.map(item => item.repo_name);
-    const yAxisData = top10Data.map(item => item.influence_score);
+    // 准备数据（确保所有分数是数字）
+    const xAxisData = top10Data.map(item => item.repo_name || '未知项目');
+    const yAxisData = top10Data.map(item => {
+        // 强制转换为数字，空值/非数字默认为0
+        return Number(item.influence_score) || 0;
+    });
+
+    // 动态计算纵轴最大值
+    const maxScore = yAxisData.length > 0 ? Math.max(...yAxisData) : 100;
+    const yAxisMax = maxScore * 1.1;
 
     // 初始化ECharts实例
-    const chart = echarts.init(document.getElementById('ranking-chart'));
+    const chart = echarts.getInstanceByDom(chartDom) || echarts.init(chartDom);
 
-    // 配置图表选项
     const option = {
         title: {
             text: `影响力Top10项目（${selectedLanguage === 'all' ? '所有语言' : selectedLanguage}）`,
@@ -222,41 +243,41 @@ function renderRankingChart() {
         },
         tooltip: {
             trigger: 'axis',
-            axisPointer: {
-                type: 'shadow'
-            },
+            axisPointer: { type: 'shadow' },
             formatter: function(params) {
-                const data = params[0].data;
-                const item = top10Data.find(item => item.influence_score === data);
+                const dataIndex = params[0].dataIndex;
+                const item = top10Data[dataIndex];
+                const influenceScore = Number(item.influence_score) || 0;
+                const starsScore = Number(item.stars_score) || 0;
+                const activityScore = Number(item.activity_score) || 0;
                 return `
                     <div style="text-align: left;">
-                        <strong>${item.repo_name}</strong><br/>
-                        影响力分数：${item.influence_score.toFixed(2)}<br/>
-                        Star评分：${item.stars_score.toFixed(2)}<br/>
-                        活跃度评分：${item.activity_score.toFixed(2)}
+                        <strong>${item.repo_name || '未知项目'}</strong><br/>
+                        影响力分数：${influenceScore.toFixed(2)}<br/>
+                        Star评分：${starsScore.toFixed(2)}<br/>
+                        活跃度评分：${activityScore.toFixed(2)}
                     </div>
                 `;
             }
         },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
+        grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
         xAxis: {
             type: 'category',
             data: xAxisData,
-            axisLabel: {
-                rotate: 45,
-                fontSize: 12
-            }
+            axisLabel: { rotate: 45, fontSize: 12 }
         },
         yAxis: {
             type: 'value',
             name: '影响力分数',
             min: 0,
-            max: 10
+            max: yAxisMax,
+            // 修复：使用普通字符串，避免转义问题
+            axisLabel: {
+                formatter: function(value) {
+                    // 只显示整数
+                    return Number.isInteger(value) ? value : '';
+                }
+            },
         },
         series: [
             {
@@ -265,9 +286,8 @@ function renderRankingChart() {
                 data: yAxisData,
                 itemStyle: {
                     color: function(params) {
-                        // 不同排名用不同颜色
                         const colorList = [
-                            '#ffd700', '#c0c0c0', '#cd7f32', // 金银铜
+                            '#ffd700', '#c0c0c0', '#cd7f32', 
                             '#007bff', '#28a745', '#ffc107', 
                             '#dc3545', '#17a2b8', '#6610f2', '#fd7e14'
                         ];
@@ -277,19 +297,34 @@ function renderRankingChart() {
                 label: {
                     show: true,
                     position: 'top',
-                    formatter: '{c:.2f}'
+                    // 修复：使用普通字符串，避免转义问题
+                    formatter: '{c}',
+                    fontSize: 11
                 }
             }
         ]
     };
 
-    // 渲染图表
-    chart.setOption(option);
+    // 强制更新图表配置
+    chart.setOption(option, true);
+    window.addEventListener('resize', () => chart.resize());
+}
+
+/**
+ * 切换表格展开/收起状态
+ */
+function toggleTableView() {
+    isExpanded = !isExpanded;
+    const toggleBtn = document.getElementById('toggle-btn');
+    const icon = toggleBtn.querySelector('i');
     
-    // 响应窗口大小变化
-    window.addEventListener('resize', function() {
-        chart.resize();
-    });
+    if (isExpanded) {
+        toggleBtn.innerHTML = '<i class="bi bi-chevron-up"></i> 收起';
+    } else {
+        toggleBtn.innerHTML = '<i class="bi bi-chevron-down"></i> 展开全部';
+    }
+    
+    renderRankingTable();
 }
 
 /**
@@ -308,12 +343,15 @@ function renderRankingTable() {
     // 按影响力分数降序排序
     const sortedData = [...filteredData].sort((a, b) => b.influence_score - a.influence_score);
 
+    // 控制显示数量
+    const displayData = isExpanded ? sortedData : sortedData.slice(0, 15);
+
     // 获取表格tbody
     const tableBody = document.querySelector('#ranking-table tbody');
     tableBody.innerHTML = '';
 
     // 填充表格数据
-    sortedData.forEach((item, index) => {
+    displayData.forEach((item, index) => {
         const tr = document.createElement('tr');
         
         // 排名变化样式类
@@ -339,4 +377,15 @@ function renderRankingTable() {
         
         tableBody.appendChild(tr);
     });
+    
+    // 如果有更多记录，添加"查看更多"行
+    if (!isExpanded && sortedData.length > 15) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td colspan="7" style="text-align: center; padding: 10px;">
+                <span>共 ${sortedData.length} 条记录，当前显示前15条</span>
+            </td>
+        `;
+        tableBody.appendChild(tr);
+    }
 }
