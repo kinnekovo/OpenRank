@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目详情 - 开源项目数据分析平台</title>
+    <!-- 复用现有style.css -->
+    <link rel="stylesheet" href="../style.css">
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- 引入依赖库 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+</head>
+<body>
+    <!-- 顶部导航栏（复用现有结构） -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <<i class="bi bi-bar-chart-line"></</i>
+            <span>开源项目数据分析平台</span>
+        </div>
+        <div class="navbar-menu">
+            <a href="index.html">平台概览</a>
+            <a href="ranking.html">影响力排名</a>
+            <a href="project-list.html" class="active">项目信息</a>
+            <a href="trends.html">技术趋势</a>
+        </div>
+        <div class="navbar-user">
+            <span>登录用户</span>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <!-- 侧边栏（复用现有结构） -->
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <a href="index.html" class="sidebar-item">
+                    <<i class="bi bi-house"></</i>
+                    <span>平台概览</span>
+                </a>
+                <a href="ranking.html" class="sidebar-item">
+                    <<i class="bi bi-trophy"></</i>
+                    <span>影响力排名</span>
+                </a>
+                <a href="project-list.html" class="sidebar-item active">
+                    <<i class="bi bi-grid-1x2-fill"></</i>
+                    <span>项目信息</span>
+                </a>
+                <a href="trends.html" class="sidebar-item">
+                    <<i class="bi bi-line-chart"></</i>
+                    <span>技术趋势</span>
+                </a>
+            </div>
+            <div class="sidebar-footer">
+                <div>数据更新时间</div>
+                <div class="update-time">2026-01</div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <div class="content">
+            <!-- 面包屑导航 -->
+            <div class="breadcrumb">
+                <a href="index.html">首页</a> > 
+                <a href="project-list.html">项目信息列表</a> > 
+                <span id="current-project">项目详情</span>
+            </div>
+
+            <!-- 返回按钮 -->
+            <button class="btn-secondary" style="margin-bottom: 20px;" onclick="window.location.href='project-list.html'">
+                <<i class="bi bi-arrow-left"></</i> 返回列表
+            </button>
+
+            <!-- 项目基础信息模块 -->
+            <div class="module">
+                <div class="module-header">
+                    <h2><<i class="bi bi-github"></</i> 项目基础信息</h2>
+                </div>
+                <div class="metric-row" id="basic-info-container">
+                    <!-- 动态填充基础信息卡片 -->
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px 0; color: var(--gray-400);">
+                        正在加载项目信息...
+                    </div>
+                </div>
+            </div>
+
+            <!-- 可视化仪表盘模块 -->
+            <div class="module">
+                <div class="module-header">
+                    <h2><<i class="bi bi-chart-pie"></</i> 项目数据可视化</h2>
+                    <p>基于projects_complete.csv数据生成的关键指标趋势与分布</p>
+                </div>
+
+                <!-- 图表行（2行2列布局） -->
+                <div class="chart-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                    <!-- 指标雷达图 -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>核心指标雷达图</h3>
+                        </div>
+                        <div id="radar-chart" class="chart-container" style="height: 300px;"></div>
+                    </div>
+
+                    <!-- 星标趋势图 -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>星标数趋势</h3>
+                        </div>
+                        <div id="stars-trend-chart" class="chart-container" style="height: 300px;"></div>
+                    </div>
+
+                    <!-- 活跃度趋势图 -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>活跃度得分趋势</h3>
+                        </div>
+                        <div id="activity-trend-chart" class="chart-container" style="height: 300px;"></div>
+                    </div>
+
+                    <!-- 影响力构成图 -->
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>影响力得分构成</h3>
+                        </div>
+                        <div id="influence-pie-chart" class="chart-container" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 项目完整数据表格 -->
+            <div class="module">
+                <div class="module-header">
+                    <h2><<i class="bi bi-table"></</i> 项目完整数据</h2>
+                </div>
+                <div class="table-row">
+                    <div class="table-card">
+                        <div class="table-container">
+                            <table id="detail-table" class="table" style="min-width: 1000px;">
+                                <thead>
+                                    <tr>
+                                        <<th>指标名称</</th>
+                                        <<th>指标值</</th>
+                                        <<th>指标说明</</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detail-table-body">
+                                    <tr>
+                                        <td colspan="3" style="text-align: center; padding: 40px 0; color: var(--gray-400);">
+                                            正在加载完整数据...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚（复用现有结构） -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">© 2026 开源项目数据分析平台</div>
+            <div class="footer-right">
+                <a href="#"><<i class="bi bi-github"></</i> 源码地址</a>
+                <a href="#"><<i class="bi bi-file-text"></</i> 帮助文档</a>
+                <a href="#"><<i class="bi bi-envelope"></</i> 联系我们</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 全局变量：当前项目数据
+        let currentProjectData = null;
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 解析URL参数（获取项目名）
+            const urlParams = new URLSearchParams(window.location.search);
+            const repoName = urlParams.get('repo');
+            if (!repoName) {
+                alert('无效的项目参数，将返回列表页');
+                window.location.href = 'project-list.html';
+                return;
+            }
+            const decodedRepoName = decodeURIComponent(repoName);
+            document.getElementById('current-project').textContent = decodedRepoName;
+
+            // 加载CSV数据并筛选当前项目
+            loadProjectDetail(decodedRepoName);
+        });
+
+        /**
+         * 加载项目详情数据
+         */
+        function loadProjectDetail(targetRepo) {
+            Papa.parse('../data/projects_complete.csv', {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    // 筛选目标项目（精确匹配项目名）
+                    const project = results.data.find(item => item.repo_name === targetRepo);
+                    if (!project) {
+                        // 若未找到，提示并返回列表页
+                        document.getElementById('basic-info-container').innerHTML = `
+                            <div style="grid-column: 1/-1; text-align: center; padding: 40px 0; color: var(--danger);">
+                                未找到项目 "${targetRepo}" 的数据
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    currentProjectData = project;
+                    // 渲染基础信息
+                    renderBasicInfo(project);
+                    // 渲染完整数据表格
+                    renderDetailTable(project);
+                    // 初始化Echarts图表
+                    initEcharts(project);
+                },
+                error: function() {
+                    document.getElementById('basic-info-container').innerHTML = `
+                        <div style="grid-column: 1/-1; text-align: center; padding: 40px 0; color: var(--danger);">
+                            项目数据加载失败，请检查CSV文件路径！
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        /**
+         * 渲染项目基础信息（卡片布局）
+         */
+        function renderBasicInfo(project) {
+            const container = document.getElementById('basic-info-container');
+            container.innerHTML = '';
+
+            // 定义基础信息卡片配置
+            const infoCards = [
+                {
+                    title: '项目名称',
+                    value: project.repo_name || '未知',
+                    icon: 'bi-github',
+                    color: 'bg-primary'
+                },
+                {
+                    title: '编程语言',
+                    value: project.language || 'Unknown',
+                    icon: 'bi-code',
+                    color: 'bg-info'
+                },
+                {
+                    title: '最新星标数',
+                    value: project.latest_stars || '0',
+                    icon: 'bi-star',
+                    color: 'bg-warning'
+                },
+                {
+                    title: '最新活跃度',
+                    value: (Number(project.latest_activity) || 0).toFixed(2),
+                    icon: 'bi-fire',
+                    color: 'bg-danger'
+                },
+                {
+                    title: '最新OpenRank',
+                    value: (Number(project.latest_openrank) || 0).toFixed(2),
+                    icon: 'bi-ranking-star',
+                    color: 'bg-success'
+                },
+                {
+                    title: '影响力得分',
+                    value: (Number(project.influence_score) || 0).toFixed(2),
+                    icon: 'bi-arrow-trend-up',
+                    color: 'bg-primary'
+                },
+                {
+                    title: '总线因子',
+                    value: (Number(project.latest_bus_factor) || 0).toFixed(2),
+                    icon: 'bi-people',
+                    color: 'bg-info'
+                },
+                {
+                    title: '代码变动率',
+                    value: (Number(project.code_churn_ratio) || 0).toFixed(4),
+                    icon: 'bi-wrench',
+                    color: 'bg-warning'
+                }
+            ];
+
+            // 生成卡片
+            infoCards.forEach(cardConfig => {
+                const card = document.createElement('div');
+                card.className = 'metric-card';
+                card.innerHTML = `
+                    <div class="card-icon ${cardConfig.color}">
+                        <<i class="bi ${cardConfig.icon}"></</i>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-title">${cardConfig.title}</div>
+                        <div class="card-value">${cardConfig.value}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        /**
+         * 渲染项目完整数据表格
+         */
+        function renderDetailTable(project) {
+            const tableBody = document.getElementById('detail-table-body');
+            tableBody.innerHTML = '';
+
+            // 定义指标说明映射（对应CSV字段）
+            const metricDescMap = {
+                'repo_name': '项目仓库名称',
+                'updated_at': '最后更新时间（时间戳）',
+                'language': '项目编程语言',
+                'latest_stars': '最新星标数',
+                'latest_activity': '最新活跃度得分',
+                'latest_openrank': '最新OpenRank得分',
+                'latest_attention': '最新关注度得分',
+                'latest_bus_factor': '最新总线因子',
+                'stars_avg': '星标数平均值',
+                'stars_trend': '星标数趋势（增长率）',
+                'stars_total': '星标数总计',
+                'activity_avg': '活跃度平均值',
+                'activity_trend': '活跃度趋势（增长率）',
+                'activity_total': '活跃度总计',
+                'openrank_avg': 'OpenRank平均值',
+                'openrank_trend': 'OpenRank趋势（增长率）',
+                'openrank_total': 'OpenRank总计',
+                'attention_avg': '关注度平均值',
+                'attention_trend': '关注度趋势（增长率）',
+                'attention_total': '关注度总计',
+                'bus_factor_avg': '总线因子平均值',
+                'bus_factor_trend': '总线因子趋势（增长率）',
+                'bus_factor_total': '总线因子总计',
+                'avg_issue_age': '平均Issue时长（天）',
+                'latest_participants': '最新参与者数量',
+                'new_contributors_trend': '新贡献者趋势',
+                'code_churn_ratio': '代码变动率',
+                'influence_score': '项目影响力综合得分'
+            };
+
+            // 遍历CSV字段，生成表格行
+            Object.entries(project).forEach(([key, value]) => {
+                const tr = document.createElement('tr');
+                // 格式化数值（保留2位小数）
+                const formattedValue = !isNaN(Number(value)) ? Number(value).toFixed(2) : value || '无数据';
+                // 指标说明（无说明时显示字段名）
+                const desc = metricDescMap[key] || key;
+
+                tr.innerHTML = `
+                    <td style="font-weight: 500;">${desc}</td>
+                    <td>${formattedValue}</td>
+                    <td style="color: var(--gray-400); font-size: 0.85rem;">
+                        ${key === 'updated_at' ? '时间戳可转换为YYYY-MM-DD格式' : ''}
+                        ${key.includes('trend') ? '正数为增长，负数为下降' : ''}
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        /**
+         * 初始化Echarts可视化图表
+         */
+        function initEcharts(project) {
+            const p = project;
+
+            // 1. 核心指标雷达图
+            const radarChart = echarts.init(document.getElementById('radar-chart'));
+            radarChart.setOption({
+                tooltip: { trigger: 'item' },
+                legend: { top: 0, left: 'center' },
+                radar: {
+                    indicator: [
+                        { name: '星标数', max: Math.max(1000, Number(p.latest_stars) || 100) },
+                        { name: '活跃度', max: Math.max(1000, Number(p.latest_activity) || 100) },
+                        { name: 'OpenRank', max: Math.max(500, Number(p.latest_openrank) || 50) },
+                        { name: '关注度', max: Math.max(200, Number(p.latest_attention) || 20) },
+                        { name: '总线因子', max: Math.max(100, Number(p.latest_bus_factor) || 10) }
+                    ]
+                },
+                series: [{
+                    name: '当前项目指标',
+                    type: 'radar',
+                    data: [{
+                        value: [
+                            Number(p.latest_stars) || 0,
+                            Number(p.latest_activity) || 0,
+                            Number(p.latest_openrank) || 0,
+                            Number(p.latest_attention) || 0,
+                            Number(p.latest_bus_factor) || 0
+                        ],
+                        itemStyle: { color: '#165DFF' },
+                        areaStyle: { color: 'rgba(22, 93, 255, 0.2)' }
+                    }]
+                }]
+            });
+
+            // 2. 星标趋势图（模拟6个月数据）
+            const starsTrendChart = echarts.init(document.getElementById('stars-trend-chart'));
+            const months = ['6月前', '5月前', '4月前', '3月前', '2月前', '1月前', '当前'];
+            const starsTrend = [
+                Number(p.stars_total) * 0.7,
+                Number(p.stars_total) * 0.75,
+                Number(p.stars_total) * 0.82,
+                Number(p.stars_total) * 0.88,
+                Number(p.stars_total) * 0.93,
+                Number(p.stars_total) * 0.97,
+                Number(p.stars_total) || 0
+            ];
+            starsTrendChart.setOption({
+                tooltip: { trigger: 'axis' },
+                xAxis: { type: 'category', data: months },
+                yAxis: { type: 'value', name: '星标数' },
+                series: [{
+                    name: '星标数趋势',
+                    type: 'line',
+                    data: starsTrend,
+                    smooth: true,
+                    itemStyle: { color: '#FF7D00' },
+                    lineStyle: { width: 2 },
+                    areaStyle: { color: 'rgba(255, 125, 0, 0.1)' }
+                }]
+            });
+
+            // 3. 活跃度趋势图（模拟6个月数据）
+            const activityTrendChart = echarts.init(document.getElementById('activity-trend-chart'));
+            const activityTrend = [
+                Number(p.activity_total) * 0.75,
+                Number(p.activity_total) * 0.8,
+                Number(p.activity_total) * 0.85,
+                Number(p.activity_total) * 0.9,
+                Number(p.activity_total) * 0.94,
+                Number(p.activity_total) * 0.97,
+                Number(p.activity_total) || 0
+            ];
+            activityTrendChart.setOption({
+                tooltip: { trigger: 'axis' },
+                xAxis: { type: 'category', data: months },
+                yAxis: { type: 'value', name: '活跃度得分' },
+                series: [{
+                    name: '活跃度趋势',
+                    type: 'bar',
+                    data: activityTrend,
+                    itemStyle: { color: '#F53F3F' },
+                    barWidth: '60%'
+                }]
+            });
+
+            // 4. 影响力构成图（基于相关指标）
+            const influencePieChart = echarts.init(document.getElementById('influence-pie-chart'));
+            influencePieChart.setOption({
+                tooltip: { trigger: 'item' },
+                legend: { bottom: 0, left: 'center' },
+                series: [{
+                    name: '影响力构成',
+                    type: 'pie',
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 8,
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    },
+                    label: { show: false, position: 'center' },
+                    emphasis: {
+                        label: { show: true, fontSize: '16', fontWeight: 'bold' }
+                    },
+                    labelLine: { show: false },
+                    data: [
+                        { value: Number(p.latest_stars) || 0, name: '星标贡献' },
+                        { value: Number(p.latest_activity) || 0, name: '活跃度贡献' },
+                        { value: Number(p.latest_openrank) || 0, name: 'OpenRank贡献' },
+                        { value: Number(p.latest_attention) || 0, name: '关注度贡献' },
+                        { value: Number(p.latest_bus_factor) || 0, name: '总线因子贡献' }
+                    ]
+                }]
+            });
+
+            // 窗口 resize 时重置图表大小
+            window.addEventListener('resize', function() {
+                radarChart.resize();
+                starsTrendChart.resize();
+                activityTrendChart.resize();
+                influencePieChart.resize();
+            });
+        }
+    </script>
+</body>
+</html>

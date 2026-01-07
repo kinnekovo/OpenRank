@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目信息列表 - 开源项目数据分析平台</title>
+    <!-- 复用现有style.css（确保路径正确） -->
+    <link rel="stylesheet" href="../style.css">
+    <!-- 引入图标库（复用现有依赖） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- 引入外部JS依赖（CSV解析） -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+<body>
+    <!-- 导航栏 -->
+    <header class="navbar">
+        <div class="navbar-logo">
+            <i class="bi bi-bar-chart-line"></i>
+            <span>OpenInsight</span>
+        </div>
+        <div class="navbar-menu">
+            <a href="../index.html">首页</a>
+            <a href="../influence-analysis/index.html">影响力分析</a>
+            <a href="../trend-analysis/index.html">技术趋势分析</a>
+            <a href="projects/list.html">项目详情页</a>
+        </div>
+        <div class="navbar-user">
+            <span class="date" id="current-date"></span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- 主内容区（修复布局：筛选栏对齐、豆腐块网格间距） -->
+        <div class="content">
+            <!-- 面包屑导航（复用样式） -->
+            <div class="breadcrumb">
+                <a href="index.html">首页</a> > 项目信息列表
+            </div>
+
+            <!-- 项目列表模块（核心布局修复） -->
+            <div class="module">
+                <div class="module-header">
+                    <h2><<i class="bi bi-grid-1x2-fill"></</i> 开源项目列表</h2>
+                    <p>共300个开源项目，支持按项目名称、编程语言、技术领域搜索筛选</p>
+                </div>
+
+                <!-- 筛选工具栏（修复：Flex布局对齐，增加间距，避免元素重叠） -->
+                <div class="tool-bar" style="align-items: center; gap: 16px; flex-wrap: wrap;">
+                    <div class="filter-group" style="display: flex; align-items: center; gap: 16px;">
+                        <label for="language-filter" style="white-space: nowrap;">编程语言：</label>
+                        <select id="language-filter" class="form-select">
+                            <option value="">全部语言</option>
+                            <!-- JS动态填充语言选项 -->
+                        </select>
+
+                        <label for="field-filter" style="white-space: nowrap;">技术领域：</label>
+                        <select id="field-filter" class="form-select">
+                            <option value="">全部领域</option>
+                            <option value="AI/ML">人工智能/机器学习</option>
+                            <option value="Web开发">Web开发</option>
+                            <option value="移动开发">移动开发</option>
+                            <option value="后端开发">后端开发</option>
+                            <option value="DevOps">DevOps</option>
+                            <option value="工具类">工具类</option>
+                        </select>
+                    </div>
+
+                    <div class="search-group" style="margin-left: auto;">
+                        <input type="text" id="project-search" placeholder="搜索项目名称..." style="width: 240px;">
+                        <button class="btn-primary" id="search-btn">
+                            <<i class="bi bi-search"></</i> 搜索
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 项目豆腐块容器（修复：网格布局间距，确保响应式折行正常） -->
+                <div id="project-grid" class="metric-row" style="margin-top: 24px; gap: 16px;">
+                    <!-- JS动态填充项目豆腐块 -->
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px 0; color: var(--gray-400);">
+                        正在加载项目数据...
+                    </div>
+                </div>
+
+                <!-- 分页控件（修复：居中对齐，按钮间距） -->
+                <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 24px; flex-wrap: wrap;">
+                    <button class="btn-secondary" id="prev-page" disabled>
+                        <<i class="bi bi-chevron-left"></</i> 上一页
+                    </button>
+                    <span id="page-info">第 1 页 / 共 30 页</span>
+                    <button class="btn-secondary" id="next-page">
+                        下一页 <<i class="bi bi-chevron-right"></</i>
+                    </button>
+                    <span style="margin-left: 20px; color: var(--gray-400);">
+                        每页显示 10 个项目
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚（复用index.html结构） -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">© 2026 开源项目数据分析平台</div>
+            <div class="footer-right">
+                <a href="#"><<i class="bi bi-github"></</i> 源码地址</a>
+                <a href="#"><<i class="bi bi-file-text"></</i> 帮助文档</a>
+                <a href="#"><<i class="bi bi-envelope"></</i> 联系我们</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 引入外部JS逻辑（关键：放在body末尾，确保DOM加载完成后执行） -->
+    <script src="list.js"></script>
+</body>
+</html>
