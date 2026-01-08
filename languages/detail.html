@@ -151,6 +151,65 @@
             border-color: #165DFF;
             color: #165DFF;
         }
+        /* Top10项目表格样式 */
+        #top-projects-table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: fixed;
+        }
+        #top-projects-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 2px solid #dee2e6;
+        }
+        #top-projects-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+            word-wrap: break-word;
+        }
+        #top-projects-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        #top-projects-table .rank-1,
+        #top-projects-table .rank-2,
+        #top-projects-table .rank-3 {
+            color: #F53F3F;
+            font-weight: bold;
+        }
+        #top-projects-table .project-link {
+            color: #165DFF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        #top-projects-table th:nth-child(1),
+        #top-projects-table td:nth-child(1) {
+            width: 8%;
+        }
+        #top-projects-table th:nth-child(2),
+        #top-projects-table td:nth-child(2) {
+            width: 40%;
+        }
+        #top-projects-table th:nth-child(3),
+        #top-projects-table td:nth-child(3) {
+            width: 15%;
+        }
+        #top-projects-table th:nth-child(4),
+        #top-projects-table td:nth-child(4) {
+            width: 15%;
+        }
+        #top-projects-table th:nth-child(5),
+        #top-projects-table td:nth-child(5) {
+            width: 12%;
+        }
+        #top-projects-table th:nth-child(6),
+        #top-projects-table td:nth-child(6) {
+            width: 10%;
+        }
     </style>
 </head>
 <body>
@@ -183,6 +242,10 @@
                 <a href="#language-trends" class="sidebar-item">
                     <i class="bi bi-graph-up"></i>
                     <span>趋势分析</span>
+                </a>
+                <a href="#top-projects" class="sidebar-item">
+                    <i class="bi bi-star-fill"></i>
+                    <span>热门项目</span>
                 </a>
                 <a href="#language-data" class="sidebar-item">
                     <i class="bi bi-table"></i>
@@ -217,7 +280,7 @@
                     <span class="trend-tag" id="trend-tag">趋势</span>
                 </div>
 
-                <!-- 4. 基础信息方块 + 趋势图 -->
+                <!-- 4. 基础信息方块 + 雷达图 -->
                 <div class="basic-radar-wrapper">
                     <!-- 左侧：基础信息方块（2行5列） -->
                     <div class="basic-info-grid" id="basic-info-container">
@@ -234,10 +297,10 @@
                         <div class="basic-info-card"><div class="label">加载中...</div></div>
                     </div>
 
-                    <!-- 右侧：趋势图区域 -->
-                    <div class="trend-chart-wrapper">
-                        <h4 style="margin: 0 0 16px 0;">近期趋势图</h4>
-                        <div id="trend-chart" class="chart-container"></div>
+                    <!-- 右侧：雷达图区域 -->
+                    <div class="radar-chart-wrapper">
+                        <h4 style="margin: 0 0 16px 0;">核心指标雷达图</h4>
+                        <div id="radar-chart" class="chart-container"></div>
                     </div>
                 </div>
             </div>
@@ -247,41 +310,50 @@
                 <!-- 5. 下方分析层标签 + 可视化区域 -->
                 <!-- 分析层标签 -->
                 <div class="analysis-tabs">
-                    <div class="analysis-tab active" data-tab="overview">概览分析</div>
-                    <div class="analysis-tab" data-tab="detailed">详细趋势</div>
+                    <div class="analysis-tab active" data-tab="trends">核心指标趋势</div>
+                    <div class="analysis-tab" data-tab="volatility">波动分析</div>
                     <div class="analysis-tab" data-tab="comparison">对比分析</div>
+                    <div class="analysis-tab" data-tab="prediction">预测分析</div>
                 </div>
 
                 <!-- 分析层内容区 -->
-                <!-- 5.1 概览分析层 -->
-                <div class="analysis-content active" id="overview-tab">
+                <!-- 5.1 核心指标趋势 -->
+                <div class="analysis-content active" id="trends-tab">
                     <div class="chart-grid">
                         <div class="chart-item">
-                            <h4>项目数量趋势</h4>
-                            <div id="project-count-chart" class="chart-container"></div>
+                            <h4>星标数趋势</h4>
+                            <div id="stars-trend-chart" class="chart-container"></div>
                         </div>
                         <div class="chart-item">
-                            <h4>平均星标趋势</h4>
-                            <div id="avg-stars-chart" class="chart-container"></div>
+                            <h4>OpenRank趋势</h4>
+                            <div id="openrank-trend-chart" class="chart-container"></div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- 5.2 详细趋势分析层 -->
-                <div class="analysis-content" id="detailed-tab">
-                    <div class="chart-grid">
                         <div class="chart-item">
-                            <h4>活跃度得分趋势</h4>
-                            <div id="activity-score-chart" class="chart-container"></div>
+                            <h4>活跃度趋势</h4>
+                            <div id="activity-trend-chart" class="chart-container"></div>
                         </div>
                         <div class="chart-item">
                             <h4>流行度指数趋势</h4>
-                            <div id="popularity-chart" class="chart-container"></div>
+                            <div id="popularity-trend-chart" class="chart-container"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 5.3 对比分析层 -->
+                <!-- 5.2 波动分析 -->
+                <div class="analysis-content" id="volatility-tab">
+                    <div class="chart-grid">
+                        <div class="chart-item">
+                            <h4>指标波动热力图</h4>
+                            <div id="volatility-heatmap-chart" class="chart-container"></div>
+                        </div>
+                        <div class="chart-item">
+                            <h4>季节性趋势分析</h4>
+                            <div id="seasonal-analysis-chart" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5.3 对比分析 -->
                 <div class="analysis-content" id="comparison-tab">
                     <div class="chart-grid">
                         <div class="chart-item">
@@ -289,14 +361,61 @@
                             <div id="language-comparison-chart" class="chart-container"></div>
                         </div>
                         <div class="chart-item">
-                            <h4>趋势方向分布</h4>
-                            <div id="trend-distribution-chart" class="chart-container"></div>
+                            <h4>内部结构变化</h4>
+                            <div id="internal-structure-chart" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5.4 预测分析 -->
+                <div class="analysis-content" id="prediction-tab">
+                    <div class="chart-grid">
+                        <div class="chart-item">
+                            <h4>趋势预测</h4>
+                            <div id="trend-prediction-chart" class="chart-container"></div>
+                        </div>
+                        <div class="chart-item">
+                            <h4>预测准确性</h4>
+                            <div id="prediction-accuracy-chart" class="chart-container"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. 编程语言数据详情模块 -->
+            <!-- 3. 热门项目模块 -->
+            <div id="top-projects">
+                <div style="margin-top: 32px;" class="table-row">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3><i class="bi bi-star-fill"></i> 使用该语言的热门项目 Top10</h3>
+                            <p>按最新星标数排序，点击项目名称可跳转到对应项目主页</p>
+                        </div>
+                        <div class="table-container">
+                            <table id="top-projects-table" class="table" style="min-width: 800px;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 60px;">排名</th>
+                                        <th>项目名称</th>
+                                        <th style="width: 100px;">星标数</th>
+                                        <th style="width: 120px;">OpenRank</th>
+                                        <th style="width: 120px;">活跃度</th>
+                                        <th style="width: 100px;">更新时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="top-projects-body">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; padding: 40px 0; color: #999;">
+                                            正在加载热门项目数据...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. 编程语言数据详情模块 -->
             <div id="language-data">
                 <!-- 6. 完整数据表格（底部） -->
                 <div style="margin-top: 32px;" class="table-row">
@@ -305,7 +424,7 @@
                             <h3>编程语言完整数据</h3>
                         </div>
                         <div class="table-container">
-                            <table id="language-table" class="table" style="min-width: 1000px;">
+                            <table id="ranking-table" class="table" style="min-width: 1000px;">
                                 <thead>
                                     <tr>
                                         <th>日期</th>

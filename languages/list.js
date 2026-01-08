@@ -9,6 +9,8 @@ const languageStore = {
     filteredLanguages: [],  // 筛选后的数据
     currentPage: 1,         // 当前页码
     pageSize: 10,           // 每页显示数量
+    currentSortField: 'name', // 当前排序字段
+    currentSortOrder: 'asc', // 当前排序顺序
     init() {
         // 初始化：加载数据 + 绑定事件
         this.loadLanguageData();
@@ -60,6 +62,7 @@ const languageStore = {
 
                 this.allLanguages = Array.from(languageMap.values());
                 this.filteredLanguages = [...this.allLanguages]; // 初始为全部数据
+                this.sortLanguages(this.currentSortField, this.currentSortOrder); // 应用默认排序
                 this.renderLanguageGrid();   // 渲染编程语言卡片
                 this.updatePagination();    // 更新分页信息
             },
@@ -71,6 +74,56 @@ const languageStore = {
                 `;
             }
         });
+    },
+
+    /**
+     * 2.5 排序编程语言数据
+     */
+    sortLanguages(sortField, sortOrder = 'asc') {
+        this.currentSortField = sortField;
+        this.currentSortOrder = sortOrder;
+        
+        this.filteredLanguages.sort((a, b) => {
+            let aValue, bValue;
+            
+            switch (sortField) {
+                case 'name':
+                    aValue = (a.language || '').toLowerCase();
+                    bValue = (b.language || '').toLowerCase();
+                    if (sortOrder === 'asc') {
+                        return aValue.localeCompare(bValue);
+                    } else {
+                        return bValue.localeCompare(aValue);
+                    }
+                case 'project_count':
+                    aValue = Number(a.project_count) || 0;
+                    bValue = Number(b.project_count) || 0;
+                    return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+                case 'avg_stars':
+                    aValue = Number(a.avg_stars) || 0;
+                    bValue = Number(b.avg_stars) || 0;
+                    return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+                case 'activity_score':
+                    aValue = Number(a.activity_score) || 0;
+                    bValue = Number(b.activity_score) || 0;
+                    return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+                case 'popularity_index':
+                    aValue = Number(a.popularity_index) || 0;
+                    bValue = Number(b.popularity_index) || 0;
+                    return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+                case 'avg_openrank':
+                    aValue = Number(a.avg_openrank) || 0;
+                    bValue = Number(b.avg_openrank) || 0;
+                    return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+                default:
+                    return 0;
+            }
+        });
+        
+        // 排序后重置到第一页并重新渲染
+        this.currentPage = 1;
+        this.renderLanguageGrid();
+        this.updatePagination();
     },
 
     /**
@@ -173,6 +226,9 @@ const languageStore = {
             return langName.includes(searchVal);
         });
 
+        // 筛选后应用当前排序
+        this.sortLanguages(this.currentSortField, this.currentSortOrder);
+        
         // 筛选后重置到第一页
         this.currentPage = 1;
         this.renderLanguageGrid();
@@ -191,6 +247,17 @@ const languageStore = {
         });
         // 搜索框输入时实时筛选
         document.getElementById('language-search').addEventListener('input', () => this.filterLanguages());
+        // 排序字段下拉菜单变化
+        document.getElementById('sort-field-select').addEventListener('change', (e) => {
+            this.sortLanguages(e.target.value, this.currentSortOrder);
+        });
+        // 排序顺序按钮点击
+        document.getElementById('sort-order-btn').addEventListener('click', () => {
+            const newOrder = this.currentSortOrder === 'asc' ? 'desc' : 'asc';
+            this.sortLanguages(this.currentSortField, newOrder);
+            // 更新按钮图标和文本
+            this.updateSortOrderButton();
+        });
         // 上一页
         document.getElementById('prev-page').addEventListener('click', () => {
             if (this.currentPage > 1) {
@@ -208,10 +275,28 @@ const languageStore = {
                 this.updatePagination();
             }
         });
+    },
+
+    /**
+     * 6.5 更新排序顺序按钮显示
+     */
+    updateSortOrderButton() {
+        const btn = document.getElementById('sort-order-btn');
+        if (this.currentSortOrder === 'asc') {
+            btn.innerHTML = '<i class="bi bi-sort-up"></i> 升序';
+            btn.title = '切换为降序';
+        } else {
+            btn.innerHTML = '<i class="bi bi-sort-down"></i> 降序';
+            btn.title = '切换为升序';
+        }
     }
 };
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
     languageStore.init();
+    // 设置排序下拉菜单的默认值
+    document.getElementById('sort-field-select').value = languageStore.currentSortField;
+    // 更新排序按钮显示
+    languageStore.updateSortOrderButton();
 });
