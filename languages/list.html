@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编程语言列表 - 开源项目数据分析平台</title>
+    <!-- 复用现有style.css（确保路径正确） -->
+    <link rel="stylesheet" href="../style.css">
+    <!-- 引入图标库（复用现有依赖） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- 引入外部JS依赖（CSV解析） -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header class="navbar">
+        <div class="navbar-logo">
+            <i class="bi bi-bar-chart-line"></i>
+            <span>开源项目数据分析平台</span>
+        </div>
+        <div class="navbar-menu">
+            <a href="../index.html">首页</a>
+            <a href="../influence-analysis/index.html">影响力排名</a>
+            <a href="../trend-analysis/index.html">技术趋势分析</a>
+            <a href="../projects/list.html">项目详情页</a>
+            <a href="./list.html">编程语言</a>
+        </div>
+        <div class="navbar-user">
+            <span class="date" id="current-date"></span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- 主内容区（修复布局：筛选栏对齐、豆腐块网格间距） -->
+        <div class="content" style="margin-left: 50px;margin-right: 50px">
+            <!-- 面包屑导航（复用样式） -->
+            <div class="breadcrumb">
+                <a href="../index.html">首页</a> > 编程语言列表
+            </div>
+
+            <!-- 编程语言列表模块（核心布局修复） -->
+            <div class="module">
+                <div class="module-header">
+                    <h2><i class="bi bi-code-slash"></i> 编程语言列表</h2>
+                    <p>共多种编程语言，支持按语言名称搜索筛选</p>
+                </div>
+
+                <!-- 筛选工具栏（修复：Flex布局对齐，增加间距，避免元素重叠） -->
+                <div class="tool-bar" style="align-items: center; gap: 16px; flex-wrap: wrap;">
+                    <div class="search-group">
+                        <input type="text" id="language-search" placeholder="搜索编程语言..." style="width: 240px;">
+                        <button class="btn-primary" id="search-btn">
+                            <i class="bi bi-search"></i> 搜索
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 编程语言豆腐块容器（修复：网格布局间距，确保响应式折行正常） -->
+                <div id="language-grid" class="metric-row" style="margin-top: 24px; gap: 16px; grid-template-columns: repeat(5, 1fr);">
+                    <!-- JS动态填充编程语言豆腐块 -->
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px 0; color: var(--gray-400);">
+                        正在加载编程语言数据...
+                    </div>
+                </div>
+
+                <!-- 分页控件（修复：居中对齐，按钮间距） -->
+                <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 24px; flex-wrap: wrap;">
+                    <button class="btn-secondary" id="prev-page" disabled>
+                        <i class="bi bi-chevron-left"></i> 上一页
+                    </button>
+                    <span id="page-info">第 1 页 / 共 1 页</span>
+                    <button class="btn-secondary" id="next-page">
+                        下一页 <i class="bi bi-chevron-right"></i>
+                    </button>
+                    <span style="margin-left: 20px; color: var(--gray-400);">
+                        每页显示 10 个编程语言
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚（复用index.html结构） -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">© 2026 开源项目数据分析平台</div>
+            <div class="footer-right">
+                <a href="#"><i class="bi bi-github"></i> 源码地址</a>
+                <a href="#"><i class="bi bi-file-text"></i> 帮助文档</a>
+                <a href="#"><i class="bi bi-envelope"></i> 联系我们</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 引入外部JS逻辑（关键：放在body末尾，确保DOM加载完成后执行） -->
+    <script src="list.js"></script>
+</body>
+</html>

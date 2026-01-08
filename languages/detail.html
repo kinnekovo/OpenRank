@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>项目详情 - 开源项目数据分析平台</title>
+    <title>编程语言详情 - 开源项目数据分析平台</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -17,18 +17,29 @@
             padding-bottom: 16px;
             border-bottom: 1px solid #eee;
         }
-        .project-title {
+        .language-title {
             font-size: 24px;
             font-weight: 700;
             color: #165DFF;
             margin-right: 16px;
         }
-        .lang-tag {
+        .trend-tag {
             padding: 4px 12px;
-            background: #e8f4ff;
-            color: #165DFF;
             border-radius: 16px;
             font-size: 14px;
+            font-weight: 500;
+        }
+        .trend-tag.up {
+            background: #e8f5e8;
+            color: #00B42A;
+        }
+        .trend-tag.down {
+            background: #ffebe9;
+            color: #F53F3F;
+        }
+        .trend-tag.stable {
+            background: #fff7e6;
+            color: #FF7D00;
         }
         /* 基础信息+雷达图 左右布局 */
         .basic-radar-wrapper {
@@ -153,7 +164,8 @@
             <a href="../index.html">首页</a>
             <a href="../influence-analysis/index.html">影响力排名</a>
             <a href="../trend-analysis/index.html">技术趋势分析</a>
-            <a href="./list.html">项目详情页</a>
+            <a href="../projects/list.html">项目详情页</a>
+            <a href="./list.html">编程语言</a>
         </div>
         <div class="navbar-user">
             <span>登录用户</span>
@@ -164,17 +176,17 @@
         <!-- 侧边栏（页面内导航） -->
         <aside class="sidebar">
             <div class="sidebar-menu">
-                <a href="#project-info" class="sidebar-item active">
+                <a href="#language-info" class="sidebar-item active">
                     <i class="bi bi-info-circle"></i>
-                    <span>项目信息</span>
+                    <span>语言信息</span>
                 </a>
-                <a href="#project-visualization" class="sidebar-item">
-                    <i class="bi bi-bar-chart-line"></i>
-                    <span>项目可视化</span>
+                <a href="#language-trends" class="sidebar-item">
+                    <i class="bi bi-graph-up"></i>
+                    <span>趋势分析</span>
                 </a>
-                <a href="#project-data-table" class="sidebar-item">
+                <a href="#language-data" class="sidebar-item">
                     <i class="bi bi-table"></i>
-                    <span>数据表格</span>
+                    <span>数据详情</span>
                 </a>
             </div>
             <div class="sidebar-footer">
@@ -185,13 +197,13 @@
 
         <!-- 主内容区（恢复面包屑+返回按钮） -->
         <div class="content">
-            <!-- 1. 项目信息模块 -->
-            <div id="project-info">
+            <!-- 1. 编程语言信息模块 -->
+            <div id="language-info">
                 <!-- 1. 面包屑导航（恢复） -->
                 <div class="breadcrumb">
-                    <a href="../index.html">首页</a> > 
-                    <a href="list.html">项目信息列表</a> > 
-                    <span id="current-project">项目详情</span>
+                    <a href="../index.html">首页</a> >
+                    <a href="list.html">编程语言列表</a> >
+                    <span id="current-language">编程语言详情</span>
                 </div>
 
                 <!-- 2. 返回按钮（恢复） -->
@@ -199,17 +211,17 @@
                     <i class="bi bi-arrow-left"></i> 返回列表
                 </button>
 
-                <!-- 3. 顶部项目名称标题 -->
+                <!-- 3. 顶部编程语言名称标题 -->
                 <div class="detail-header">
-                    <h1 class="project-title" id="project-name">项目名称</h1>
-                    <span class="lang-tag" id="project-lang">编程语言</span>
+                    <h1 class="language-title" id="language-name">编程语言</h1>
+                    <span class="trend-tag" id="trend-tag">趋势</span>
                 </div>
 
-                <!-- 4. 基础信息方块 + 右侧雷达图 -->
+                <!-- 4. 基础信息方块 + 趋势图 -->
                 <div class="basic-radar-wrapper">
                     <!-- 左侧：基础信息方块（2行5列） -->
                     <div class="basic-info-grid" id="basic-info-container">
-                        <!-- 动态填充10个基础信息方块 -->
+                        <!-- 动态填充基础信息方块 -->
                         <div class="basic-info-card"><div class="label">加载中...</div></div>
                         <div class="basic-info-card"><div class="label">加载中...</div></div>
                         <div class="basic-info-card"><div class="label">加载中...</div></div>
@@ -222,120 +234,92 @@
                         <div class="basic-info-card"><div class="label">加载中...</div></div>
                     </div>
 
-                    <!-- 右侧：雷达图区域 -->
-                    <div class="radar-chart-wrapper">
-                        <h4 style="margin: 0 0 16px 0;">核心指标雷达图</h4>
-                        <div id="radar-chart" class="chart-container"></div>
+                    <!-- 右侧：趋势图区域 -->
+                    <div class="trend-chart-wrapper">
+                        <h4 style="margin: 0 0 16px 0;">近期趋势图</h4>
+                        <div id="trend-chart" class="chart-container"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. 项目可视化模块 -->
-            <div id="project-visualization">
+            <!-- 2. 编程语言趋势分析模块 -->
+            <div id="language-trends">
                 <!-- 5. 下方分析层标签 + 可视化区域 -->
                 <!-- 分析层标签 -->
                 <div class="analysis-tabs">
-                    <div class="analysis-tab active" data-tab="core">核心指标全景层</div>
-                    <div class="analysis-tab" data-tab="trend">时间趋势分析层</div>
-                    <div class="analysis-tab" data-tab="composition">构成拆解分析层</div>
-                    <div class="analysis-tab" data-tab="compare">行业对比分析层</div>
+                    <div class="analysis-tab active" data-tab="overview">概览分析</div>
+                    <div class="analysis-tab" data-tab="detailed">详细趋势</div>
+                    <div class="analysis-tab" data-tab="comparison">对比分析</div>
                 </div>
 
                 <!-- 分析层内容区 -->
-                <!-- 5.1 核心指标全景层 -->
-                <div class="analysis-content active" id="core-tab">
+                <!-- 5.1 概览分析层 -->
+                <div class="analysis-content active" id="overview-tab">
                     <div class="chart-grid">
                         <div class="chart-item">
-                            <h4>核心指标vs行业均值</h4>
-                            <div id="core-compare-chart" class="chart-container"></div>
+                            <h4>项目数量趋势</h4>
+                            <div id="project-count-chart" class="chart-container"></div>
                         </div>
                         <div class="chart-item">
-                            <h4>指标得分分布</h4>
-                            <div id="core-distribution-chart" class="chart-container"></div>
+                            <h4>平均星标趋势</h4>
+                            <div id="avg-stars-chart" class="chart-container"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 5.2 时间趋势分析层 -->
-                <div class="analysis-content" id="trend-tab">
+                <!-- 5.2 详细趋势分析层 -->
+                <div class="analysis-content" id="detailed-tab">
                     <div class="chart-grid">
                         <div class="chart-item">
-                            <h4>星标数趋势（近12月）</h4>
-                            <div id="stars-trend-chart" class="chart-container"></div>
+                            <h4>活跃度得分趋势</h4>
+                            <div id="activity-score-chart" class="chart-container"></div>
                         </div>
                         <div class="chart-item">
-                            <h4>活跃度得分趋势（近12月）</h4>
-                            <div id="activity-trend-chart" class="chart-container"></div>
-                        </div>
-                        <div class="chart-item">
-                            <h4>贡献者增长趋势</h4>
-                            <div id="contributors-trend-chart" class="chart-container"></div>
-                        </div>
-                        <div class="chart-item">
-                            <h4>Issue处理趋势</h4>
-                            <div id="issue-trend-chart" class="chart-container"></div>
+                            <h4>流行度指数趋势</h4>
+                            <div id="popularity-chart" class="chart-container"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 5.3 构成拆解分析层 -->
-                <div class="analysis-content" id="composition-tab">
+                <!-- 5.3 对比分析层 -->
+                <div class="analysis-content" id="comparison-tab">
                     <div class="chart-grid">
                         <div class="chart-item">
-                            <h4>影响力得分构成</h4>
-                            <div id="influence-pie-chart" class="chart-container"></div>
+                            <h4>多语言对比</h4>
+                            <div id="language-comparison-chart" class="chart-container"></div>
                         </div>
                         <div class="chart-item">
-                            <h4>代码提交构成</h4>
-                            <div id="commit-composition-chart" class="chart-container"></div>
-                        </div>
-                        <div class="chart-item">
-                            <h4>Issue类型分布</h4>
-                            <div id="issue-type-chart" class="chart-container"></div>
-                        </div>
-                        <div class="chart-item">
-                            <h4>编程语言占比</h4>
-                            <div id="lang-ratio-chart" class="chart-container"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 5.4 行业对比分析层 -->
-                <div class="analysis-content" id="compare-tab">
-                    <div class="chart-grid">
-                        <div class="chart-item">
-                            <h4>同语言TOP10对比</h4>
-                            <div id="top10-compare-chart" class="chart-container"></div>
-                        </div>
-                        <div class="chart-item">
-                            <h4>指标分位分布图</h4>
-                            <div id="quantile-chart" class="chart-container"></div>
+                            <h4>趋势方向分布</h4>
+                            <div id="trend-distribution-chart" class="chart-container"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. 项目数据表格模块 -->
-            <div id="project-data-table">
-                <!-- 6. 完整数据表格（底部） - 仅改HTML继承现有CSS -->
+            <!-- 3. 编程语言数据详情模块 -->
+            <div id="language-data">
+                <!-- 6. 完整数据表格（底部） -->
                 <div style="margin-top: 32px;" class="table-row">
                     <div class="table-card">
                         <div class="table-header">
-                            <h3>项目完整数据</h3>
+                            <h3>编程语言完整数据</h3>
                         </div>
                         <div class="table-container">
-                            <!-- 关键1：把id改成ranking-table，继承已有样式；保留detail-table作为备用 -->
-                            <table id="ranking-table" class="table" style="min-width: 1000px;">
+                            <table id="language-table" class="table" style="min-width: 1000px;">
                                 <thead>
                                     <tr>
-                                        <th>指标名称</th>
-                                        <th>指标值</th>
-                                        <th>指标说明</th>
+                                        <th>日期</th>
+                                        <th>项目数量</th>
+                                        <th>平均星标</th>
+                                        <th>平均OpenRank</th>
+                                        <th>活跃度得分</th>
+                                        <th>趋势方向</th>
+                                        <th>流行度指数</th>
                                     </tr>
                                 </thead>
-                                <tbody id="detail-table-body">
+                                <tbody id="language-table-body">
                                     <tr>
-                                        <td colspan="3" style="text-align: center; padding: 40px 0; color: #999;">
+                                        <td colspan="7" style="text-align: center; padding: 40px 0; color: #999;">
                                             正在加载完整数据...
                                         </td>
                                     </tr>
