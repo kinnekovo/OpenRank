@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>编程语言列表 - 开源项目数据分析平台</title>
+    <title>技术关键词列表 - 开源项目数据分析平台</title>
     <!-- 复用现有style.css（确保路径正确） -->
     <link rel="stylesheet" href="../style.css">
     <!-- 引入图标库（复用现有依赖） -->
@@ -42,15 +42,15 @@
     <header class="navbar">
         <div class="navbar-logo">
             <i class="bi bi-bar-chart-line"></i>
-            <span>开源项目数据分析平台</span>
+            <span>OpenInsight</span>
         </div>
         <div class="navbar-menu">
             <a href="../index.html">首页</a>
-            <a href="../influence-analysis/index.html">影响力排名</a>
+            <a href="../influence-analysis/index.html">影响力分析</a>
             <a href="../trend-analysis/index.html">技术趋势分析</a>
             <a href="../projects/list.html">项目详情页</a>
-            <a href="./list.html">编程语言</a>
-            <a href="../technology/list.html">技术关键词</a>
+            <a href="../languages/list.html">编程语言</a>
+            <a href="./list.html">技术关键词</a>
         </div>
         <div class="navbar-user">
             <span class="date" id="current-date"></span>
@@ -62,20 +62,20 @@
         <div class="content" style="margin-left: 50px;margin-right: 50px">
             <!-- 面包屑导航（复用样式） -->
             <div class="breadcrumb">
-                <a href="../index.html">首页</a> > 编程语言列表
+                <a href="../index.html">首页</a> > 技术关键词列表
             </div>
 
-            <!-- 编程语言列表模块（核心布局修复） -->
+            <!-- 技术关键词列表模块（核心布局修复） -->
             <div class="module">
                 <div class="module-header">
-                    <h2><i class="bi bi-code-slash"></i> 编程语言列表</h2>
-                    <p>共多种编程语言，支持按语言名称搜索筛选</p>
+                    <h2><i class="bi bi-tags-fill"></i> 技术关键词列表</h2>
+                    <p>共多种技术关键词，支持按关键词搜索筛选和排序</p>
                 </div>
 
                 <!-- 筛选工具栏（修复：Flex布局对齐，增加间距，避免元素重叠） -->
                 <div class="tool-bar" style="align-items: center; gap: 16px; flex-wrap: wrap;">
                     <div class="search-group">
-                        <input type="text" id="language-search" placeholder="搜索编程语言..." style="width: 240px;">
+                        <input type="text" id="keyword-search" placeholder="搜索技术关键词..." style="width: 240px;">
                         <button class="btn-primary" id="search-btn">
                             <i class="bi bi-search"></i> 搜索
                         </button>
@@ -83,12 +83,13 @@
                     <div class="sort-group">
                         <label for="sort-field-select" style="margin-right: 8px; font-weight: 500;">排序：</label>
                         <select id="sort-field-select" class="sort-select">
-                            <option value="name">名称</option>
-                            <option value="project_count">项目数</option>
-                            <option value="avg_stars">平均星标</option>
-                            <option value="activity_score">活跃度</option>
-                            <option value="popularity_index">流行度</option>
-                            <option value="avg_openrank">OpenRank</option>
+                            <option value="keyword_category">关键词</option>
+                            <option value="search_volume">搜索量</option>
+                            <option value="mention_count">提及次数</option>
+                            <option value="avg_stars_per_mention">平均星标</option>
+                            <option value="influence_score">影响力</option>
+                            <option value="competitiveness">竞争力</option>
+                            <option value="adoption_rate">采用率</option>
                         </select>
                         <button id="sort-order-btn" class="btn-secondary" style="margin-left: 8px;">
                             <i class="bi bi-sort-up"></i> 升序
@@ -96,11 +97,11 @@
                     </div>
                 </div>
 
-                <!-- 编程语言豆腐块容器（修复：网格布局间距，确保响应式折行正常） -->
-                <div id="language-grid" class="metric-row" style="margin-top: 24px; gap: 16px; grid-template-columns: repeat(5, 1fr);">
-                    <!-- JS动态填充编程语言豆腐块 -->
+                <!-- 技术关键词豆腐块容器（修复：网格布局间距，确保响应式折行正常） -->
+                <div id="keyword-grid" class="metric-row" style="margin-top: 24px; gap: 16px; grid-template-columns: repeat(5, 1fr);">
+                    <!-- JS动态填充技术关键词豆腐块 -->
                     <div style="grid-column: 1/-1; text-align: center; padding: 40px 0; color: var(--gray-400);">
-                        正在加载编程语言数据...
+                        正在加载技术关键词数据...
                     </div>
                 </div>
 
@@ -114,14 +115,14 @@
                         下一页 <i class="bi bi-chevron-right"></i>
                     </button>
                     <span style="margin-left: 20px; color: var(--gray-400);">
-                        每页显示 10 个编程语言
+                        每页显示 10 个技术关键词
                     </span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 页脚（复用index.html结构） -->
+    <!-- 页脚 -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-left">© 2026 开源项目数据分析平台</div>
@@ -133,7 +134,7 @@
         </div>
     </footer>
 
-    <!-- 引入外部JS逻辑（关键：放在body末尾，确保DOM加载完成后执行） -->
-    <script src="list.js"></script>
+    <!-- 引入外部JS -->
+    <script src="./list.js"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>编程语言详情 - 开源项目数据分析平台</title>
+    <title>技术关键词详情 - 开源项目数据分析平台</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <script src="https://cdn.bootcdn.net/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -17,7 +17,7 @@
             padding-bottom: 16px;
             border-bottom: 1px solid #eee;
         }
-        .language-title {
+        .keyword-title {
             font-size: 24px;
             font-weight: 700;
             color: #165DFF;
@@ -151,7 +151,7 @@
             border-color: #165DFF;
             color: #165DFF;
         }
-        /* Top10项目表格样式 */
+        /* Top项目表格样式 */
         #top-projects-table {
             border-collapse: collapse;
             width: 100%;
@@ -170,21 +170,6 @@
             border-bottom: 1px solid #dee2e6;
             vertical-align: middle;
             word-wrap: break-word;
-        }
-        #top-projects-table tbody tr:hover {
-            background: #f8f9fa;
-        }
-        #top-projects-table .rank-1,
-        #top-projects-table .rank-2,
-        #top-projects-table .rank-3 {
-            color: #F53F3F;
-            font-weight: bold;
-        }
-        #top-projects-table .project-link {
-            color: #165DFF;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
         }
         #top-projects-table th:nth-child(1),
         #top-projects-table td:nth-child(1) {
@@ -210,6 +195,25 @@
         #top-projects-table td:nth-child(6) {
             width: 10%;
         }
+        #top-projects-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        #top-projects-table .rank-1,
+        #top-projects-table .rank-2,
+        #top-projects-table .rank-3 {
+            color: #F53F3F;
+            font-weight: bold;
+        }
+        #top-projects-table .project-link {
+            color: #165DFF;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        #top-projects-table .project-link:hover {
+            text-decoration: underline;
+            color: #0d42ff;
+        }
     </style>
 </head>
 <body>
@@ -217,15 +221,15 @@
     <nav class="navbar">
         <div class="navbar-logo">
             <i class="bi bi-bar-chart-line"></i>
-            <span>开源项目数据分析平台</span>
+            <span>OpenInsight</span>
         </div>
         <div class="navbar-menu">
             <a href="../index.html">首页</a>
-            <a href="../influence-analysis/index.html">影响力排名</a>
+            <a href="../influence-analysis/index.html">影响力分析</a>
             <a href="../trend-analysis/index.html">技术趋势分析</a>
             <a href="../projects/list.html">项目详情页</a>
-            <a href="./list.html">编程语言</a>
-            <a href="../technology/list.html">技术关键词</a>
+            <a href="../languages/list.html">编程语言</a>
+            <a href="./list.html">技术关键词</a>
         </div>
         <div class="navbar-user">
             <span>登录用户</span>
@@ -236,11 +240,11 @@
         <!-- 侧边栏（页面内导航） -->
         <aside class="sidebar">
             <div class="sidebar-menu">
-                <a href="#language-info" class="sidebar-item active">
+                <a href="#keyword-info" class="sidebar-item active">
                     <i class="bi bi-info-circle"></i>
-                    <span>语言信息</span>
+                    <span>关键词信息</span>
                 </a>
-                <a href="#language-trends" class="sidebar-item">
+                <a href="#keyword-trends" class="sidebar-item">
                     <i class="bi bi-graph-up"></i>
                     <span>趋势分析</span>
                 </a>
@@ -248,7 +252,7 @@
                     <i class="bi bi-star-fill"></i>
                     <span>热门项目</span>
                 </a>
-                <a href="#language-data" class="sidebar-item">
+                <a href="#keyword-data" class="sidebar-item">
                     <i class="bi bi-table"></i>
                     <span>数据详情</span>
                 </a>
@@ -261,13 +265,13 @@
 
         <!-- 主内容区（恢复面包屑+返回按钮） -->
         <div class="content">
-            <!-- 1. 编程语言信息模块 -->
-            <div id="language-info">
+            <!-- 1. 技术关键词信息模块 -->
+            <div id="keyword-info">
                 <!-- 1. 面包屑导航（恢复） -->
                 <div class="breadcrumb">
                     <a href="../index.html">首页</a> >
-                    <a href="list.html">编程语言列表</a> >
-                    <span id="current-language">编程语言详情</span>
+                    <a href="list.html">技术关键词列表</a> >
+                    <span id="current-keyword">技术关键词详情</span>
                 </div>
 
                 <!-- 2. 返回按钮（恢复） -->
@@ -275,9 +279,9 @@
                     <i class="bi bi-arrow-left"></i> 返回列表
                 </button>
 
-                <!-- 3. 顶部编程语言名称标题 -->
+                <!-- 3. 顶部技术关键词名称标题 -->
                 <div class="detail-header">
-                    <h1 class="language-title" id="language-name">编程语言</h1>
+                    <h1 class="keyword-title" id="keyword-name">技术关键词</h1>
                     <span class="trend-tag" id="trend-tag">趋势</span>
                 </div>
 
@@ -306,8 +310,8 @@
                 </div>
             </div>
 
-            <!-- 2. 编程语言趋势分析模块 -->
-            <div id="language-trends">
+            <!-- 2. 技术关键词趋势分析模块 -->
+            <div id="keyword-trends">
                 <!-- 5. 下方分析层标签 + 可视化区域 -->
                 <!-- 分析层标签 -->
                 <div class="analysis-tabs">
@@ -322,20 +326,20 @@
                 <div class="analysis-content active" id="trends-tab">
                     <div class="chart-grid">
                         <div class="chart-item">
-                            <h4>星标数趋势</h4>
-                            <div id="stars-trend-chart" class="chart-container"></div>
+                            <h4>搜索量趋势</h4>
+                            <div id="search-volume-trend-chart" class="chart-container"></div>
                         </div>
                         <div class="chart-item">
-                            <h4>OpenRank趋势</h4>
-                            <div id="openrank-trend-chart" class="chart-container"></div>
+                            <h4>影响力趋势</h4>
+                            <div id="influence-trend-chart" class="chart-container"></div>
                         </div>
                         <div class="chart-item">
-                            <h4>活跃度趋势</h4>
-                            <div id="activity-trend-chart" class="chart-container"></div>
+                            <h4>竞争力趋势</h4>
+                            <div id="competitiveness-trend-chart" class="chart-container"></div>
                         </div>
                         <div class="chart-item">
-                            <h4>流行度指数趋势</h4>
-                            <div id="popularity-trend-chart" class="chart-container"></div>
+                            <h4>采用率趋势</h4>
+                            <div id="adoption-trend-chart" class="chart-container"></div>
                         </div>
                     </div>
                 </div>
@@ -358,12 +362,12 @@
                 <div class="analysis-content" id="comparison-tab">
                     <div class="chart-grid">
                         <div class="chart-item">
-                            <h4>多语言对比</h4>
-                            <div id="language-comparison-chart" class="chart-container"></div>
+                            <h4>关键词对比</h4>
+                            <div id="keyword-comparison-chart" class="chart-container"></div>
                         </div>
                         <div class="chart-item">
-                            <h4>内部结构变化</h4>
-                            <div id="internal-structure-chart" class="chart-container"></div>
+                            <h4>发展趋势对比</h4>
+                            <div id="trend-comparison-chart" class="chart-container"></div>
                         </div>
                     </div>
                 </div>
@@ -388,19 +392,19 @@
                 <div style="margin-top: 32px;" class="table-row">
                     <div class="table-card">
                         <div class="table-header">
-                            <h3><i class="bi bi-star-fill"></i> 使用该语言的热门项目 Top10</h3>
-                            <p>按最新星标数排序，点击项目名称可跳转到对应项目主页</p>
+                            <h3><i class="bi bi-star-fill"></i> 使用该关键词的热门项目 Top10</h3>
+                            <p>按最新星标数排序，点击项目名称可跳转到GitHub</p>
                         </div>
                         <div class="table-container">
-                            <table id="top-projects-table" class="table" style="min-width: 800px;">
+                            <table id="top-projects-table" class="table">
                                 <thead>
                                     <tr>
-                                        <th style="width: 60px;">排名</th>
+                                        <th>排名</th>
                                         <th>项目名称</th>
-                                        <th style="width: 100px;">星标数</th>
-                                        <th style="width: 120px;">OpenRank</th>
-                                        <th style="width: 120px;">活跃度</th>
-                                        <th style="width: 100px;">更新时间</th>
+                                        <th>星标数</th>
+                                        <th>OpenRank</th>
+                                        <th>活跃度</th>
+                                        <th>更新时间</th>
                                     </tr>
                                 </thead>
                                 <tbody id="top-projects-body">
@@ -416,30 +420,31 @@
                 </div>
             </div>
 
-            <!-- 4. 编程语言数据详情模块 -->
-            <div id="language-data">
+            <!-- 4. 技术关键词数据详情模块 -->
+            <div id="keyword-data">
                 <!-- 6. 完整数据表格（底部） -->
                 <div style="margin-top: 32px;" class="table-row">
                     <div class="table-card">
                         <div class="table-header">
-                            <h3>编程语言完整数据</h3>
+                            <h3>技术关键词完整数据</h3>
                         </div>
                         <div class="table-container">
                             <table id="ranking-table" class="table" style="min-width: 1000px;">
                                 <thead>
                                     <tr>
                                         <th>日期</th>
-                                        <th>项目数量</th>
+                                        <th>搜索量</th>
+                                        <th>提及次数</th>
                                         <th>平均星标</th>
-                                        <th>平均OpenRank</th>
-                                        <th>活跃度得分</th>
+                                        <th>影响力得分</th>
                                         <th>趋势方向</th>
-                                        <th>流行度指数</th>
+                                        <th>竞争力</th>
+                                        <th>采用率</th>
                                     </tr>
                                 </thead>
-                                <tbody id="language-table-body">
+                                <tbody id="keyword-table-body">
                                     <tr>
-                                        <td colspan="7" style="text-align: center; padding: 40px 0; color: #999;">
+                                        <td colspan="8" style="text-align: center; padding: 40px 0; color: #999;">
                                             正在加载完整数据...
                                         </td>
                                     </tr>
