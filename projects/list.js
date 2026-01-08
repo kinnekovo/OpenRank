@@ -99,7 +99,7 @@ const projectStore = {
             card.style.cursor = 'pointer';
             card.innerHTML = `
                 <div class="card-icon bg-primary">
-                    <<i class="bi bi-github"></</i>
+                    <i class="bi bi-github"></i>
                 </div>
                 <div class="card-content">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
@@ -126,7 +126,7 @@ const projectStore = {
             // 点击跳转详情页（URL编码项目名，避免特殊字符问题）
             card.addEventListener('click', () => {
                 const encodedRepo = encodeURIComponent(repoName);
-                window.location.href = `project-detail.html?repo=${encodedRepo}`;
+                window.location.href = `detail.html?repo=${encodedRepo}`;
             });
 
             gridContainer.appendChild(card);
@@ -188,6 +188,8 @@ const projectStore = {
         document.getElementById('project-search').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') this.filterProjects();
         });
+        // 搜索框输入时实时筛选
+        document.getElementById('project-search').addEventListener('input', () => this.filterProjects());
         // 语言筛选变更
         document.getElementById('language-filter').addEventListener('change', () => this.filterProjects());
         // 领域筛选变更

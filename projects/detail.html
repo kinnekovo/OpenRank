@@ -16,14 +16,14 @@
     <!-- 顶部导航栏（复用现有结构） -->
     <nav class="navbar">
         <div class="navbar-logo">
-            <<i class="bi bi-bar-chart-line"></</i>
+            <i class="bi bi-bar-chart-line"></i>
             <span>开源项目数据分析平台</span>
         </div>
         <div class="navbar-menu">
-            <a href="index.html">平台概览</a>
-            <a href="ranking.html">影响力排名</a>
-            <a href="project-list.html" class="active">项目信息</a>
-            <a href="trends.html">技术趋势</a>
+            <a href="../index.html">平台概览</a>
+            <a href="../ranking.html">影响力排名</a>
+            <a href="list.html" class="active">项目信息</a>
+            <a href="../trends.html">技术趋势</a>
         </div>
         <div class="navbar-user">
             <span>登录用户</span>
@@ -34,20 +34,20 @@
         <!-- 侧边栏（复用现有结构） -->
         <aside class="sidebar">
             <div class="sidebar-menu">
-                <a href="index.html" class="sidebar-item">
-                    <<i class="bi bi-house"></</i>
+                <a href="../index.html" class="sidebar-item">
+                    <i class="bi bi-house"></i>
                     <span>平台概览</span>
                 </a>
-                <a href="ranking.html" class="sidebar-item">
-                    <<i class="bi bi-trophy"></</i>
+                <a href="../ranking.html" class="sidebar-item">
+                    <i class="bi bi-trophy"></i>
                     <span>影响力排名</span>
                 </a>
-                <a href="project-list.html" class="sidebar-item active">
-                    <<i class="bi bi-grid-1x2-fill"></</i>
+                <a href="list.html" class="sidebar-item active">
+                    <i class="bi bi-grid-1x2-fill"></i>
                     <span>项目信息</span>
                 </a>
-                <a href="trends.html" class="sidebar-item">
-                    <<i class="bi bi-line-chart"></</i>
+                <a href="../trends.html" class="sidebar-item">
+                    <i class="bi bi-line-chart"></i>
                     <span>技术趋势</span>
                 </a>
             </div>
@@ -61,20 +61,20 @@
         <div class="content">
             <!-- 面包屑导航 -->
             <div class="breadcrumb">
-                <a href="index.html">首页</a> > 
-                <a href="project-list.html">项目信息列表</a> > 
+                <a href="../index.html">首页</a> > 
+                <a href="list.html">项目信息列表</a> > 
                 <span id="current-project">项目详情</span>
             </div>
 
             <!-- 返回按钮 -->
-            <button class="btn-secondary" style="margin-bottom: 20px;" onclick="window.location.href='project-list.html'">
-                <<i class="bi bi-arrow-left"></</i> 返回列表
+            <button class="btn-secondary" style="margin-bottom: 20px;" onclick="window.location.href='list.html'">
+                <i class="bi bi-arrow-left"></i> 返回列表
             </button>
 
             <!-- 项目基础信息模块 -->
             <div class="module">
                 <div class="module-header">
-                    <h2><<i class="bi bi-github"></</i> 项目基础信息</h2>
+                    <h2><i class="bi bi-github"></i> 项目基础信息</h2>
                 </div>
                 <div class="metric-row" id="basic-info-container">
                     <!-- 动态填充基础信息卡片 -->
@@ -87,7 +87,7 @@
             <!-- 可视化仪表盘模块 -->
             <div class="module">
                 <div class="module-header">
-                    <h2><<i class="bi bi-chart-pie"></</i> 项目数据可视化</h2>
+                    <h2><i class="bi bi-chart-pie"></i> 项目数据可视化</h2>
                     <p>基于projects_complete.csv数据生成的关键指标趋势与分布</p>
                 </div>
 
@@ -130,7 +130,7 @@
             <!-- 项目完整数据表格 -->
             <div class="module">
                 <div class="module-header">
-                    <h2><<i class="bi bi-table"></</i> 项目完整数据</h2>
+                    <h2><i class="bi bi-table"></i> 项目完整数据</h2>
                 </div>
                 <div class="table-row">
                     <div class="table-card">
@@ -138,9 +138,9 @@
                             <table id="detail-table" class="table" style="min-width: 1000px;">
                                 <thead>
                                     <tr>
-                                        <<th>指标名称</</th>
-                                        <<th>指标值</</th>
-                                        <<th>指标说明</</th>
+                                        <th>指标名称</th>
+                                        <th>指标值</th>
+                                        <th>指标说明</th>
                                     </tr>
                                 </thead>
                                 <tbody id="detail-table-body">
@@ -163,9 +163,9 @@
         <div class="footer-content">
             <div class="footer-left">© 2026 开源项目数据分析平台</div>
             <div class="footer-right">
-                <a href="#"><<i class="bi bi-github"></</i> 源码地址</a>
-                <a href="#"><<i class="bi bi-file-text"></</i> 帮助文档</a>
-                <a href="#"><<i class="bi bi-envelope"></</i> 联系我们</a>
+                <a href="#"><i class="bi bi-github"></i> 源码地址</a>
+                <a href="#"><i class="bi bi-file-text"></i> 帮助文档</a>
+                <a href="#"><i class="bi bi-envelope"></i> 联系我们</a>
             </div>
         </div>
     </footer>
@@ -294,7 +294,7 @@
                 card.className = 'metric-card';
                 card.innerHTML = `
                     <div class="card-icon ${cardConfig.color}">
-                        <<i class="bi ${cardConfig.icon}"></</i>
+                        <i class="bi ${cardConfig.icon}"></i>
                     </div>
                     <div class="card-content">
                         <div class="card-title">${cardConfig.title}</div>
