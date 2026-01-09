@@ -105,7 +105,7 @@ const projectStore = {
                 <div class="card-content" style="width: 100%;">
                     <!-- 项目名+标签：调整字体大小与间距 -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h3 style="font-size: 1.1rem; color: var(--gray-800); font-weight: 600; margin: 0; line-height: 1.2;">${repoName}</h3>
+                        <h3 style="font-size: 1.2rem; color: var(--gray-800); font-weight: 600; margin: 0; line-height: 1.2;">${repoName}</h3>
                         <span style="background: var(--gray-100); padding: 3px 10px; border-radius: 4px; font-size: 0.85rem; color: var(--gray-600);">${field}</span>
                     </div>
                     <!-- 收藏数+语言：优化排版与字体大小 -->

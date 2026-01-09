@@ -135,6 +135,7 @@ function initDomainTrendChart() {
             symbol: 'circle',
             symbolSize: 6,
             lineStyle: { width: 2 },
+            color: getColorByDomain(domain),
             itemStyle: { color: getColorByDomain(domain) }
         };
     });
@@ -202,6 +203,7 @@ function initDomainForecastChart() {
             name: domain,
             type: 'bar',
             data: allData,
+            color: getColorByDomain(domain),
             itemStyle: {
                 color: (params) => {
                     // 历史数据纯色，预测数据半透明
@@ -328,6 +330,7 @@ function initLanguageTrendChart() {
             symbol: 'circle',
             symbolSize: 6,
             lineStyle: { width: 2 },
+            color: getColorByLang(lang),
             itemStyle: { color: getColorByLang(lang) }
         };
     });
@@ -395,6 +398,7 @@ function initLanguageForecastChart() {
             name: lang,
             type: 'bar',
             data: allData,
+            color: getColorByLang(lang),
             itemStyle: {
                 color: (params) => {
                     // 历史数据纯色，预测数据半透明
@@ -478,32 +482,30 @@ function getFilterConditions() {
  * 按领域分配颜色
  */
 function getColorByDomain(domain) {
-    // 替换成你想要的彩色值（支持十六进制/RGB/RGBA）
     const colorMap = {
-        'AI/ML': '#16A34A',        // 绿色（AI/ML）
-        'Web开发': '#2563EB',       // 蓝色（Web开发）
-        '云原生': '#DC2626',        // 红色（云原生）
-        '大数据': '#F59E0B',        // 橙色（大数据）
-        '区块链': '#3B82F6',        // 天蓝色（区块链）
-        '未知领域': '#6B7280'       // 灰色（兜底）
+        'AI/ML': '#4CAF50',        
+        'Web开发': '#2196F3',       
+        '云原生': '#FF9800',       
+        '大数据': '#F44336',        
+        '区块链': '#9C27B0',       
+        '未知领域': '#9E9E9E'       
     };
-    return colorMap[domain] || '#6B7280';
+    return colorMap[domain] || '#9E9E9E';
 }
 
 /**
  * 按语言分配颜色
  */
 function getColorByLang(lang) {
-    // 替换成你想要的彩色值
     const colorMap = {
-        'Python': '#3776AB',        // Python蓝
-        'JavaScript': '#F7DF1E',    // JS黄
-        'TypeScript': '#3178C6',    // TS蓝
-        'Java': '#007396',          // Java蓝
-        'Go': '#00ADD8',            // Go青
-        '未知语言': '#6B7280'       // 灰色（兜底）
+        'Python': '#6495ED',        
+        'JavaScript': '#FFD700',    
+        'TypeScript': '#008B8B',    
+        'Java': '#F44336',          
+        'Go': '#42A5F5',            
+        '未知语言': '#9E9E9E'      
     };
-    return colorMap[lang] || '#6B7280';
+    return colorMap[lang] || '#9E9E9E';
 }
 
 /**

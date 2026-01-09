@@ -171,15 +171,12 @@ const keywordStore = {
             card.className = 'metric-card';
             card.style.cursor = 'pointer';
             card.innerHTML = `
-                <div class="card-icon bg-primary">
+                <div class="card-icon bg-primary" style="margin-left: 12px; margin-right: 40px;">
                     <i class="bi bi-tags"></i>
                 </div>
                 <div class="card-content">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                        <h3 style="font-size: 1rem; color: var(--gray-600);">${keywordName}</h3>
-                        <span style="background: var(--light); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; color: var(--gray-500);">
-                            <i class="bi ${trendIcon}"></i>
-                        </span>
+                        <h3 style="font-size: 1.5rem; color: var(--gray-600);">${keywordName}</h3>
                     </div>
                     <div style="display: flex; gap: 16px; margin-bottom: 8px;">
                         <div>
