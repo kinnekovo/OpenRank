@@ -41,21 +41,17 @@
                     <i class="bi bi-speedometer2"></i>
                     <span>平台概览</span>
                 </a>
-                <a href="#ranking" class="sidebar-item">
+                <a href="#technology" class="sidebar-item">
                     <i class="bi bi-trophy"></i>
-                    <span>影响力排名</span>
+                    <span>技术领域</span>
                 </a>
-                <a href="#trends" class="sidebar-item disabled">
+                <a href="#language" class="sidebar-item">
                     <i class="bi bi-graph-up"></i>
-                    <span>技术趋势</span>
+                    <span>编程语言</span>
                 </a>
-                <a href="#qa" class="sidebar-item disabled">
+                <a href="#conclusion" class="sidebar-item">
                     <i class="bi bi-chat-dots"></i>
-                    <span>智能问答</span>
-                </a>
-                <a href="#data" class="sidebar-item disabled">
-                    <i class="bi bi-database"></i>
-                    <span>数据管理</span>
+                    <span>预测结论</span>
                 </a>
             </div>
             
@@ -97,7 +93,7 @@
             </div>
 
             <!-- 核心指标卡片 -->
-            <div class="metric-row">
+            <section id="overview" class="metric-row">
                 <div class="metric-card">
                     <div class="card-icon bg-success">
                         <i class="bi bi-arrow-trend-up"></i>
@@ -138,10 +134,10 @@
                         <div class="card-desc" id="domain-falling-desc">影响力跌幅25%（2025-02至2026-01）</div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- 第一部分：技术领域趋势（独立图表，优先展示） -->
-            <section class="module">
+            <section id="technology" class="module">
                 <div class="module-header">
                     <h2><i class="bi bi-cubes"></i> 技术领域趋势分析</h2>
                     <p>基于keyword_trends.csv数据 | 核心指标：影响力得分</p>
@@ -171,7 +167,7 @@
             </section>
 
             <!-- 第二部分：编程语言趋势（独立图表，后展示） -->
-            <section class="module">
+            <section id="language" class="module">
                 <div class="module-header">
                     <h2><i class="bi bi-code-slash"></i> 编程语言趋势分析</h2>
                     <p>基于language_trends_detailed.csv数据 | 核心指标：热度指数</p>
@@ -201,7 +197,7 @@
             </section>
 
             <!-- 趋势结论汇总 -->
-            <section class="module">
+            <section id="conclusion" class="module">
                 <div class="module-header">
                     <h2><i class="bi bi-file-text-fill"></i> 趋势预测结论</h2>
                     <p>综合技术领域与编程语言趋势分析 | 更新时间：2026-01</p>

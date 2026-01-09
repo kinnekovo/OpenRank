@@ -42,6 +42,10 @@ body {
     flex-direction: column;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 /* 顶部导航栏 */
 .navbar {
     height: var(--navbar-height);
@@ -442,6 +446,15 @@ body {
     font-size: 0.9rem;
     border-bottom: 1px solid var(--gray-200);
     color: var(--gray-500);
+}
+
+#ranking-table a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+#ranking-table a:hover {
+    text-decoration: underline;
 }
 
 #ranking-table tr:hover {

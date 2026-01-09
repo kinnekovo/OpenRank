@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('query-btn').addEventListener('click', updateAllCharts);
     // 4. 绑定复制按钮事件
     document.getElementById('copy-btn').addEventListener('click', copyConclusion);
+    // 5. 绑定侧边栏导航事件
+    bindSidebarNavigation();
 });
 
 /**
@@ -514,4 +516,59 @@ function copyConclusion() {
     }).catch(err => {
         alert('复制失败：' + err.message);
     });
+}
+
+/**
+ * 绑定侧边栏导航事件（平滑滚动到对应模块）
+ */
+function bindSidebarNavigation() {
+    console.log('技术趋势页面：绑定侧边栏导航事件...');
+    // 点击导航
+    document.querySelectorAll('.sidebar-item:not(.disabled)').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = item.getAttribute('href');
+            console.log('技术趋势页面：点击导航:', targetId);
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                console.log('技术趋势页面：找到目标元素:', targetElement, '位置:', targetElement.offsetTop);
+                // 使用 window.scrollTo 作为替代方案
+                const targetPosition = targetElement.offsetTop - 20; // 减去一些偏移
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                console.log('技术趋势页面：执行了 window.scrollTo 到位置:', targetPosition);
+            } else {
+                console.log('技术趋势页面：未找到目标元素:', targetId);
+            }
+        });
+    });
+
+    // 滚动时更新激活状态
+    const observerOptions = {
+        root: null,
+        rootMargin: '-50% 0px -50% 0px',
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                document.querySelectorAll('.sidebar-item').forEach(si => si.classList.remove('active'));
+                const activeLink = document.querySelector(`.sidebar-item[href="#${id}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+        });
+    }, observerOptions);
+
+    // 观察所有 section
+    document.querySelectorAll('section[id]').forEach(section => {
+        console.log('技术趋势页面：观察 section:', section.id);
+        observer.observe(section);
+    });
+    console.log('技术趋势页面：侧边栏导航绑定完成');
 }

@@ -98,27 +98,31 @@ const projectStore = {
             card.className = 'metric-card';
             card.style.cursor = 'pointer';
             card.innerHTML = `
-                <div class="card-icon bg-primary">
-                    <i class="bi bi-github"></i>
+                <!-- 调整图标大小与位置，更醒目 -->
+                <div class="card-icon bg-primary" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 6px; margin-bottom: 12px;">
+                    <<i class="bi bi-github" style="font-size: 1.2rem;"></</i>
                 </div>
-                <div class="card-content">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                        <h3 style="font-size: 1rem; color: var(--gray-600);">${repoName}</h3>
-                        <span style="background: var(--light); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; color: var(--gray-500);">${field}</span>
+                <div class="card-content" style="width: 100%;">
+                    <!-- 项目名+标签：调整字体大小与间距 -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="font-size: 1.1rem; color: var(--gray-800); font-weight: 600; margin: 0; line-height: 1.2;">${repoName}</h3>
+                        <span style="background: var(--gray-100); padding: 3px 10px; border-radius: 4px; font-size: 0.85rem; color: var(--gray-600);">${field}</span>
                     </div>
-                    <div style="display: flex; gap: 16px; margin-bottom: 8px;">
+                    <!-- 收藏数+语言：优化排版与字体大小 -->
+                    <div style="display: flex; gap: 20px; margin-bottom: 10px; align-items: baseline;">
                         <div>
-                            <div class="card-title">收藏数</div>
-                            <div class="card-value" style="font-size: 1.2rem;">${stars}</div>
+                            <div class="card-title" style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 2px;">收藏数</div>
+                            <div class="card-value" style="font-size: 1.3rem; color: var(--gray-800);">${stars}</div>
                         </div>
                         <div>
-                            <div class="card-title">编程语言</div>
-                            <div class="card-value" style="font-size: 1.2rem;">${language}</div>
+                            <div class="card-title" style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 2px;">编程语言</div>
+                            <div class="card-value" style="font-size: 1.3rem; color: var(--gray-800);">${language}</div>
                         </div>
                     </div>
+                    <!-- 活跃度得分：突出显示 -->
                     <div>
-                        <div class="card-title">活跃度得分</div>
-                        <div class="card-value" style="font-size: 1.2rem;">${activity}</div>
+                        <div class="card-title" style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 2px;">活跃度得分</div>
+                        <div class="card-value" style="font-size: 1.4rem; color: var(--primary); font-weight: 500;">${activity}</div>
                     </div>
                 </div>
             `;

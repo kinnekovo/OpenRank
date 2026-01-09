@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
             renderRankingTable();
         });
     }
+
+    // 绑定侧边栏导航事件
+    bindSidebarNavigation();
 });
 
 /**
@@ -340,6 +343,7 @@ function toggleTableView() {
  * 渲染完整排名表格（新增语言筛选功能）
  */
 function renderRankingTable() {
+    console.log('开始渲染排名表格...');
     const tableBody = document.querySelector('#ranking-table tbody');
     if (!tableBody) {
         console.warn('⚠️ 未找到ranking-table tbody DOM元素');
@@ -349,6 +353,7 @@ function renderRankingTable() {
     // 新增：获取语言筛选器的选中值（复用现有筛选器）
     const filterSelect = document.getElementById('language-filter');
     const selectedLanguage = filterSelect ? filterSelect.value : 'all';
+    console.log('当前筛选语言:', selectedLanguage);
     
     // 新增：根据选中语言筛选数据
     let filteredData = rankingData;
@@ -358,6 +363,7 @@ function renderRankingTable() {
             return item.language === selectedLanguage;
         });
     }
+    console.log('筛选后数据长度:', filteredData.length);
     
     // 按影响力分数降序排序（基于筛选后的数据）
     const sortedData = [...filteredData].sort((a, b) => {
@@ -368,12 +374,14 @@ function renderRankingTable() {
 
     // 展开/收起逻辑（保留原有）
     const displayData = isExpanded ? sortedData : sortedData.slice(0, 15);
+    console.log('显示数据长度:', displayData.length);
 
     // 清空表格内容
     tableBody.innerHTML = '';
 
     // 填充表格数据（使用筛选后的displayData）
     displayData.forEach((item, index) => {
+        console.log(`渲染第${index + 1}行项目:`, item.repo_name);
         const tr = document.createElement('tr');
         
         // 排名变化样式类（保留原有）
@@ -387,9 +395,11 @@ function renderRankingTable() {
             rankChangeText = `↓${Math.abs(item.ranking_change)}`;
         }
 
+        const encodedRepo = encodeURIComponent(item.repo_name || '未知项目');
+        console.log(`项目 ${item.repo_name} 的编码链接: ../projects/detail.html?repo=${encodedRepo}`);
         tr.innerHTML = `
             <td>${index + 1}</td>
-            <td>${item.repo_name || '未知项目'}</td>
+            <td><a href="../projects/detail.html?repo=${encodedRepo}" target="_blank">${item.repo_name || '未知项目'}</a></td>
             <td>${item.language || 'Unknown'}</td>
             <td>${(Number(item.influence_score) || 0).toFixed(2)}</td>
             <td>${(Number(item.stars_score) || 0).toFixed(2)}</td>
@@ -399,6 +409,8 @@ function renderRankingTable() {
         
         tableBody.appendChild(tr);
     });
+
+    console.log('表格渲染完成');
 
     // 数据条数提示（更新为筛选后的数据量）
     const tableContainer = tableBody.parentElement.parentElement;
@@ -414,4 +426,46 @@ function renderRankingTable() {
     } else {
         tipElement.textContent = `共${sortedData.length}条数据`;
     }
+}
+
+/**
+ * 绑定侧边栏导航事件（平滑滚动到对应模块）
+ */
+function bindSidebarNavigation() {
+    // 点击导航
+    document.querySelectorAll('.sidebar-item:not(.disabled)').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = item.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+
+    // 滚动时更新激活状态
+    const observerOptions = {
+        root: null,
+        rootMargin: '-50% 0px -50% 0px',
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                document.querySelectorAll('.sidebar-item').forEach(si => si.classList.remove('active'));
+                const activeLink = document.querySelector(`.sidebar-item[href="#${id}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+        });
+    }, observerOptions);
+
+    // 观察所有 section
+    document.querySelectorAll('section[id]').forEach(section => {
+        observer.observe(section);
+    });
 }

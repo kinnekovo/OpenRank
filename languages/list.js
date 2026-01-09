@@ -10,7 +10,7 @@ const languageStore = {
     currentPage: 1,         // 当前页码
     pageSize: 10,           // 每页显示数量
     currentSortField: 'name', // 当前排序字段
-    currentSortOrder: 'asc', // 当前排序顺序
+    currentSortOrder: 'desc', // 当前排序顺序
     init() {
         // 初始化：加载数据 + 绑定事件
         this.loadLanguageData();
