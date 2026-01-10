@@ -161,8 +161,6 @@ function initAllCharts() {
     initRadarChart();
     // 3.2 核心指标趋势分析层图表
     initTrendsCharts();
-    // 3.3 波动分析层图表
-    initVolatilityCharts();
     // 3.4 对比分析层图表
     initComparisonCharts();
     // 3.5 预测分析层图表
@@ -339,116 +337,6 @@ function initTrendsCharts() {
             data: adoptionData,
             itemStyle: { color: '#F53F3F' },
             areaStyle: { color: 'rgba(245, 63, 63, 0.1)' }
-        }]
-    });
-}
-
-/**
- * 3.3 波动分析层图表
- */
-function initVolatilityCharts() {
-    // 3.3.1 指标波动热力图
-    const heatmapDom = document.getElementById('volatility-heatmap-chart');
-    chartInstances.volatilityHeatmap = echarts.init(heatmapDom);
-
-    // 准备热力图数据：计算每个月的波动幅度
-    const months = [];
-    const metrics = ['search_volume', 'mention_count', 'avg_stars_per_mention', 'influence_score', 'competitiveness', 'adoption_rate'];
-    const metricNames = ['搜索量', '提及次数', '平均星标', '影响力得分', '竞争力', '采用率'];
-
-    // 按月份分组数据
-    const monthlyData = {};
-    keywordData.forEach(item => {
-        const monthKey = item.date;
-        if (!monthlyData[monthKey]) {
-            monthlyData[monthKey] = [];
-            months.push(monthKey);
-        }
-        monthlyData[monthKey].push(item);
-    });
-
-    // 计算每个月的波动性（标准差）
-    const heatmapData = [];
-    months.forEach((month, monthIndex) => {
-        metrics.forEach((metric, metricIndex) => {
-            const values = monthlyData[month].map(item => Number(item[metric]));
-            const mean = values.reduce((a, b) => a + b, 0) / values.length;
-            const variance = values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length;
-            const stdDev = Math.sqrt(variance);
-
-            heatmapData.push([metricIndex, monthIndex, stdDev.toFixed(2)]);
-        });
-    });
-
-    chartInstances.volatilityHeatmap.setOption({
-        tooltip: {
-            position: 'top',
-            formatter: function(params) {
-                return `${params.seriesName}<br/>${metricNames[params.data[0]]} - ${months[params.data[1]]}<br/>波动幅度: ${params.data[2]}`;
-            }
-        },
-        xAxis: {
-            type: 'category',
-            data: months,
-            splitArea: { show: true }
-        },
-        yAxis: {
-            type: 'category',
-            data: metricNames,
-            splitArea: { show: true }
-        },
-        visualMap: {
-            min: 0,
-            max: Math.max(...heatmapData.map(d => d[2])),
-            calculable: true,
-            orient: 'horizontal',
-            left: 'center',
-            bottom: '15%'
-        },
-        series: [{
-            name: '波动热力图',
-            type: 'heatmap',
-            data: heatmapData,
-            label: { show: false },
-            emphasis: { itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0, 0, 0, 0.5)' } }
-        }]
-    });
-
-    // 3.3.2 季节性趋势分析（箱线图）
-    const seasonalDom = document.getElementById('seasonal-analysis-chart');
-    chartInstances.seasonalAnalysis = echarts.init(seasonalDom);
-
-    // 按季度分组数据
-    const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
-    const quarterlyData = quarters.map(() => []);
-
-    keywordData.forEach(item => {
-        const date = new Date(item.date + '-01');
-        const quarter = Math.floor(date.getMonth() / 3);
-        quarterlyData[quarter].push(Number(item.influence_score));
-    });
-
-    // 计算每个季度的统计数据（用于箱线图）
-    const boxplotData = quarterlyData.map(data => {
-        if (data.length === 0) return [0, 0, 0, 0, 0];
-        data.sort((a, b) => a - b);
-        const q1 = data[Math.floor(data.length * 0.25)];
-        const median = data[Math.floor(data.length * 0.5)];
-        const q3 = data[Math.floor(data.length * 0.75)];
-        const min = data[0];
-        const max = data[data.length - 1];
-        return [min, q1, median, q3, max];
-    });
-
-    chartInstances.seasonalAnalysis.setOption({
-        tooltip: { trigger: 'item' },
-        xAxis: { type: 'category', data: quarters },
-        yAxis: { type: 'value' },
-        series: [{
-            name: '季节性分布',
-            type: 'boxplot',
-            data: boxplotData,
-            itemStyle: { color: '#165DFF', borderColor: '#165DFF' }
         }]
     });
 }
