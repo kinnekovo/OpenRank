@@ -573,3 +573,147 @@ html {
     color: var(--primary);
     border-right: 3px solid var(--primary);
 }
+
+/* 趋势结论样式 */
+.conclusion-section {
+    margin-bottom: 40px;
+    padding: 24px;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+}
+
+.conclusion-section h3 {
+    color: var(--gray-700);
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.conclusion-section h3 i {
+    color: var(--primary);
+    font-size: 1.4rem;
+}
+
+.conclusion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* 特定部分强制2列布局 */
+.conclusion-section:nth-child(1) .conclusion-grid,
+.conclusion-section:nth-child(3) .conclusion-grid,
+.conclusion-section:nth-child(4) .conclusion-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.conclusion-item {
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    transition: all 0.3s ease;
+}
+
+.conclusion-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
+.conclusion-item h4 {
+    color: var(--primary);
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.conclusion-item p {
+    color: var(--gray-600);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.conclusion-item strong {
+    color: var(--gray-700);
+    font-weight: 600;
+}
+
+.action-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    overflow: hidden;
+}
+
+.action-list li {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-600);
+    line-height: 1.6;
+    transition: background-color 0.3s ease;
+}
+
+.action-list li strong {
+    color: var(--primary);
+    display: inline-block;
+    min-width: 120px;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .conclusion-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+    }
+    
+    .conclusion-section {
+        padding: 20px;
+        margin-bottom: 32px;
+    }
+    
+    .conclusion-section h3 {
+        font-size: 1.1rem;
+        padding: 6px 10px;
+    }
+    
+    .conclusion-item {
+        padding: 16px;
+    }
+    
+    .action-list li {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .action-list li strong {
+        min-width: 100px;
+        font-size: 0.9rem;
+    }
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .conclusion-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .conclusion-section {
+        padding: 16px;
+    }
+}
